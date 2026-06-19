@@ -1,0 +1,122 @@
+# Author:
+#     Loic Gouarin <loic.gouarin@gmail.com>
+#
+# License: BSD 3 clause
+"""Material to update the output image using a cunbic spline equation."""
+
+import numpy as np
+
+from .color import DEFAULT_COLOR
+from .draw import draw_pixel
+from .spline import spline, splint
+
+
+def update_path(
+    path: np.ndarray,
+    periodic: bool = False,  # noqa: FBT001, FBT002
+    scale_value: float = 0.00001,
+) -> None:
+    """
+    Update the path of the spline.
+
+    We move each point of the path by a random vector
+    defined inside a circle where
+
+        - the center is the point of the path
+        - the radius is a random number between [-1, 1]
+
+    Parameters
+    ----------
+    path : np.ndarray
+        The y coordinate of the cubic spline.
+
+    periodic : bool
+        If True, the first and the last points of the
+        path are the same (the default value is False).
+
+    scale_value : float
+        Rescale the random radius (default value is 0.00001).
+
+    """
+    n = path.shape[0]
+    scale = np.arange(n) * scale_value
+    radius = 1.0 - 2.0 * np.random.Generator(n)
+    noise = radius * scale
+    phi = np.random.Generator(n) * 2 * np.pi
+    rnd = np.c_[np.cos(phi), np.sin(phi)]
+    path += rnd * noise[:, np.newaxis]
+    if periodic:
+        path[-1] = path[0]
+
+
+# pylint: disable=too-many-arguments
+def update_img(  # noqa: PLR0913
+    img: np.ndarray,
+    path: np.ndarray,
+    xs_func: any,
+    x: np.ndarray = None,
+    nrep: int = 300,
+    periodic: bool = True,  # noqa: FBT001, FBT002
+    scale_color: float = 0.005,
+    color: tuple = DEFAULT_COLOR,
+    scale_value: float = 0.00001,
+) -> None:
+    """
+    Update the image using a cubic spline on a shape.
+
+    Parameters
+    ----------
+    img : np.ndarray
+        The output image.
+
+    path : np.ndarray
+        The y coordinate of the cubic spline if x is not None,
+        the coordinates of the cubic spline if x is None.
+
+    x : np.ndarray
+        The x coordinates of the cubic spline if given.
+        (the default value is None)
+
+    xs_func : function
+        The function that return the x coordinate of the sampling points
+        where to compute the y coordinates given the spline equation.
+
+    nrep : int
+        Number of iteration (default is 300).
+
+    periodic : bool
+        Define if the first and last points of the path must be equal
+        (default is True).
+
+    scale_color : float
+        Scale the given color (default is 0.005).
+
+    color : list(4)
+        Define the RGBA color to plot the spline.
+
+    scale_value : float
+        Rescale the random radius (default value is 0.00001).
+
+    See Also
+    --------
+    update_path
+
+    """
+    xspline = xs_func()
+
+    yspline = np.zeros(xspline.size)
+    if x is not None:
+        yspline = np.zeros((xspline.size, 2))
+
+    for _i in range(nrep):  # pylint: disable=unused-variable
+        if x is not None:
+            yder2 = spline(x, path)
+            xspline = xs_func()
+            splint(x, path, yder2, xspline, yspline)
+            draw_pixel(img, yspline[:, 0], yspline[:, 1], scale_color, color)
+        else:
+            yder2 = spline(path[:, 0], path[:, 1])
+            xspline = xs_func()
+            splint(path[:, 0], path[:, 1], yder2, xspline, yspline)
+            draw_pixel(img, yspline, xspline, scale_color, color)
+        update_path(path, scale_value=scale_value, periodic=periodic)

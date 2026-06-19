@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+# A TESTER EN SUITE
+#requires = ["uv_build>=0.11.20,<0.12"]
+#build-backend = "uv_build"
+
+[project]
+name = "splinart"
+dynamic = ["version"]
+description = "spline art generator"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
+authors = [{ name = "Loic Gouarin", email = "loic.gouarin@gmail.com" }]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    'Intended Audience :: Science/Research',
+    'Intended Audience :: Developers',
+    'Programming Language :: Cython',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: Implementation :: CPython',
+    'Topic :: Software Development',
+    'Topic :: Scientific/Engineering',
+    'Typing :: Typed',
+    'Operating System :: Microsoft :: Windows',
+    'Operating System :: POSIX',
+    'Operating System :: Unix',
+    'Operating System :: MacOS',
+]
+dependencies = [
+    "argparse>=1.4.0",
+    "matplotlib>=3.11.0",
+    "numpy>=2.4.6",
+    "pre-commit>=4.6.0",
+    "pylint>=4.0.6",
+    "ruff>=0.15.17",
+    "ty>=0.0.51",
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "splinart.version.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["splinart*"]
+
+[project.scripts]
+splinart = "splinart.scripts.cli_splinart:main"
+
+[tool.ruff]
+line-length = 88
+# 88 is the standard line length
+lint.select = ["ALL"]
+lint.ignore = [
+    "T20",  # ignore print statements
+    "D4",   # ignore docstring formatting
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*py" = ["S101"]  # allow assert in tests
+
+# RAJOUT LCREPEAU 20260421
+[tool.ruff.format]
+preview = true

@@ -228,7 +228,7 @@ Installed 22 packages in 82ms
  + sphinxcontrib-jsmath==1.0.1
  + sphinxcontrib-qthelp==2.0.0
  + sphinxcontrib-serializinghtml==2.0.0
- - splinart==0.1.0 (from file:///home/lcrepeau/formations/tests_python/TPs/3.linter/splinart)
+ - splinart==0.1.0 (from file:///home/lcrepeau/splinart)
  + splinart==0.1.0 (from file:///home/lcrepeau/splinart)
  + urllib3==2.7.0
 ```
@@ -1291,3 +1291,135 @@ api/splinart.spline.md
 ![graph][internal-sourcemd9]
 
 [internal-sourcemd9]: images/sphinx_splinart_notebook_md.png 'Notebooks'
+
+## TESTER l'APPLICATION splinart
+
+### INSTALLATION DES LIBRAIRIES
+
+L'extension pytest pytest-cov sert pour calculer la couverture des tests.
+    L'extension pytest pytest-mpl sert à comparer des images matplotlib.
+
+```bash
+# AJOUT
+$ uv add pytest-cov pytest-mpl
+```
+
+### FAIRE LES TESTS
+
+```bash
+# PROGRAMMES DE TESTS UNITAIRES
+$ tree -f tests
+tests
+├── tests/baseline
+│   └── tests/baseline/test_circle_case.png
+├── tests/test_all.py
+├── tests/test_shape.py
+└── tests/test_spline.py
+# LANCEMENT DU PREMIER TEST
+$ uv run pytest -v tests/test_all.py
+==================================== test session starts =======================
+platform linux -- Python 3.13.5, pytest-9.1.1, pluggy-1.6.0 --
+   /home/lcrepeau/.venv/bin/python3
+cachedir: .pytest_cache
+Matplotlib: 3.11.0
+Freetype: 2.14.3
+rootdir: /home/lcrepeau/splinart
+configfile: pyproject.toml
+plugins: mpl-0.19.0, cov-7.1.0, anyio-4.14.0
+collected 1 item
+
+tests/test_all.py::test_circle_case PASSED                                [100%]
+
+==================================== 1 passed in 3.64s =========================
+# LANCEMENT DU DEUXIEME TEST
+$ uv run pytest -v tests/test_shape.py
+==================================== test session starts =======================
+platform linux -- Python 3.13.5, pytest-9.1.1, pluggy-1.6.0 --
+    /home/lcrepeau/.venv/bin/python3
+cachedir: .pytest_cache
+Matplotlib: 3.11.0
+Freetype: 2.14.3
+rootdir: /home/lcrepeau/splinart
+configfile: pyproject.toml
+plugins: mpl-0.19.0, cov-7.1.0, anyio-4.14.0
+collected 8 items
+
+tests/test_shape.py::test_circle_1 PASSED                                 [ 12%]
+tests/test_shape.py::test_circle_2 PASSED                                 [ 25%]
+tests/test_shape.py::test_line_1 PASSED                                   [ 37%]
+tests/test_shape.py::test_line_2 PASSED                                   [ 50%]
+tests/test_shape.py::test_circle[2-expected0] PASSED                      [ 62%]
+tests/test_shape.py::test_circle[5-expected1] PASSED                      [ 75%]
+tests/test_shape.py::test_line[2-expected0] PASSED                        [ 87%]
+tests/test_shape.py::test_line[3-expected1] PASSED                        [100%]
+
+==================================== 8 passed in 0.46s =========================
+# LANCEMENT DU TROISIEME TEST
+$ uv run pytest -v tests/test_spline.py
+==================================== test session starts =======================
+platform linux -- Python 3.13.5, pytest-9.1.1, pluggy-1.6.0 --
+    /home/lcrepeau/.venv/bin/python3
+cachedir: .pytest_cache
+Matplotlib: 3.11.0
+Freetype: 2.14.3
+rootdir: /home/lcrepeau/splinart
+configfile: pyproject.toml
+plugins: mpl-0.19.0, cov-7.1.0, anyio-4.14.0
+collected 18 items
+
+tests/test_spline.py::test_spline[10-0-1] PASSED                          [  5%]
+tests/test_spline.py::test_spline[10--2--1] PASSED                        [ 11%]
+tests/test_spline.py::test_spline[10--20-10] PASSED                       [ 16%]
+tests/test_spline.py::test_spline[20-0-1] PASSED                          [ 22%]
+tests/test_spline.py::test_spline[20--2--1] PASSED                        [ 27%]
+tests/test_spline.py::test_spline[20--20-10] PASSED                       [ 33%]
+tests/test_spline.py::test_spline[30-0-1] PASSED                          [ 38%]
+tests/test_spline.py::test_spline[30--2--1] PASSED                        [ 44%]
+tests/test_spline.py::test_spline[30--20-10] PASSED                       [ 50%]
+tests/test_spline.py::test_spline_circle[10-center0-1] PASSED             [ 55%]
+tests/test_spline.py::test_spline_circle[10-center1-0.1] PASSED           [ 61%]
+tests/test_spline.py::test_spline_circle[10-center2-0.3] PASSED           [ 66%]
+tests/test_spline.py::test_spline_circle[20-center0-1] PASSED             [ 72%]
+tests/test_spline.py::test_spline_circle[20-center1-0.1] PASSED           [ 77%]
+tests/test_spline.py::test_spline_circle[20-center2-0.3] PASSED           [ 83%]
+tests/test_spline.py::test_spline_circle[30-center0-1] PASSED             [ 88%]
+tests/test_spline.py::test_spline_circle[30-center1-0.1] PASSED           [ 94%]
+tests/test_spline.py::test_spline_circle[30-center2-0.3] PASSED           [100%]
+
+==================================== 18 passed in 0.50s ========================
+# LANCEMENT DE COUVERTURE DE L'APPLI splinart DES TESTS
+$ uv run pytest --cov=splinart tests/
+==================================== test session starts =======================
+platform linux -- Python 3.13.5, pytest-9.1.1, pluggy-1.6.0
+Matplotlib: 3.11.0
+Freetype: 2.14.3
+rootdir: /home/lcrepeau/splinart
+configfile: pyproject.toml
+plugins: mpl-0.19.0, cov-7.1.0, anyio-4.14.0
+collected 27 items
+
+tests/test_all.py .                                                       [  3%]
+tests/test_shape.py ........                                              [ 33%]
+tests/test_spline.py ..................                                   [100%]
+
+==================================== tests coverage ============================
+________________________ coverage: platform linux, python 3.13.5-final-0 _______
+
+Name                                   Stmts   Miss  Cover
+----------------------------------------------------------
+src/splinart/__init__.py                   4      0   100%
+src/splinart/color.py                      1      0   100%
+src/splinart/compute.py                   30      4    87%
+src/splinart/draw.py                      27      9    67%
+src/splinart/scripts/__init__.py           0      0   100%
+src/splinart/scripts/cli_splinart.py      31     31     0%
+src/splinart/shapes/__init__.py            2      0   100%
+src/splinart/shapes/base.py                9      0   100%
+src/splinart/spline/__init__.py            3      0   100%
+src/splinart/spline/spline.py             18      0   100%
+src/splinart/spline/splint.py             13      0   100%
+src/splinart/version.py                    1      1     0%
+----------------------------------------------------------
+TOTAL                                    139     45    68%
+==================================== 27 passed in 4.51s ========================
+```

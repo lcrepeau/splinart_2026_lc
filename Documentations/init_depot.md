@@ -1152,6 +1152,7 @@ Les pages HTML sont dans build/html
 ### FICHIERS DE CONF
 
 ``````bash
+# FICHIER conf.py
 docs_md $ cat source/conf.py
 # Configuration file for the Sphinx documentation builder.
 #
@@ -1187,7 +1188,12 @@ language = "fr"
 
 html_theme = "alabaster"
 html_static_path = ["_static"]
+# INTERPRETATION DES FORMULES MATHEMATIQUES
+myst_enable_extensions = ["dollarmath", "amsmath"]
 
+# The name of the Pygments (syntax highlighting) style to use.
+pygments_style = "sphinx"
+# FICHIER index.md
 docs_md $ cat source/index.md
 # Splinart lc 2026 documentation
 

@@ -4,10 +4,10 @@ repos:
   hooks:
     - id: ruff-check
       args: [ --fix ]
-      files: ^splinart/ # Only backend folder
+      files: ^src/splinart/ # Only backend folder
       stages: [pre-commit]
     - id: ruff-format
-      files: ^splinart/ # Only backend folder
+      files: ^src/splinart/ # Only backend folder
       stages: [pre-commit]
 
 - repo: https://github.com/jackdewinter/pymarkdown

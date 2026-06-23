@@ -41,9 +41,9 @@ def update_path(
     """
     n = path.shape[0]
     scale = np.arange(n) * scale_value
-    radius = 1.0 - 2.0 * np.random.Generator(n)
+    radius = 1.0 - 2.0 * np.random.random(n)  # noqa: NPY002
     noise = radius * scale
-    phi = np.random.Generator(n) * 2 * np.pi
+    phi = np.random.random(n) * 2 * np.pi  # noqa: NPY002
     rnd = np.c_[np.cos(phi), np.sin(phi)]
     path += rnd * noise[:, np.newaxis]
     if periodic:

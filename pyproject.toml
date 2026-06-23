@@ -39,6 +39,7 @@ classifiers = [
 ]
 dependencies = [
     "argparse>=1.4.0",
+    "build>=1.5.0",
     "matplotlib>=3.11.0",
     "numpy>=2.4.6",
     "pre-commit>=4.6.0",
@@ -47,11 +48,12 @@ dependencies = [
     "ty>=0.0.51",
 ]
 
+[tool.setuptools]
+package-dir={""="src"}
+packages=["splinart"]
+
 [tool.setuptools.dynamic]
 version = { attr = "splinart.version.__version__" }
-
-[tool.setuptools.packages.find]
-include = ["splinart*"]
 
 [project.scripts]
 splinart = "splinart.scripts.cli_splinart:main"

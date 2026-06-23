@@ -1,0 +1,1287 @@
+# CONFIGURATION DU PACKAGE splinart EN PARTANT DES SOURCES FOURNIS
+
+Il s'agit à partir d'un code python fourni de préparer le package à installer.
+
+```bash
+# ALLER DANS LE REPERTOIRE DE TRAVAIL
+$ cd splinart ; ls
+splinart
+# CODE FOURNI
+splinart $ tree -f
+.
+├── ./compute.py
+├── ./draw.py
+├── ./examples
+│   ├── ./examples/circle.py
+│   ├── ./examples/circles.py
+│   ├── ./examples/line.py
+│   └── ./examples/lines.py
+├── ./__init__.py
+├── ./scripts
+│   ├── ./scripts/cli_splinart.py
+│   └── ./scripts/__init__.py
+├── ./shapes
+│   ├── ./shapes/base.py
+│   └── ./shapes/__init__.py
+└── ./spline
+    ├── ./spline/__init__.py
+    ├── ./spline/spline.py
+    └── ./spline/splint.py
+```
+
+## DEFINITION DE L'ENVIRONNEMENT DE TRAVAIL
+
+Nous utiliserons la commande `uv` pour le projet.
+
+```bash
+$ uv --version
+uv 0.9.11
+# INITIALISATION DE L'ENVIRONEMENT
+$ uv init splinart
+Initialized project `splinart` at `/home/lcrepeau/splinart`
+$ ls
+splinart
+$ cd splinart
+# PREPARATION D UN pyproject.toml
+$ cat > pytproject.toml
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "splinart"# License: BSD 3 clause
+
+dynamic = ["version"]
+description = "spline art generator"
+readme = "README.md"apt list --upgradable
+requires-python = ">=3.13"
+dependencies = [
+
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "splinart.version.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["splinart*"]
+
+[project.scripts]
+splinart = "splinart.scripts.cli_splinart:main"
+$
+# AJOUT DES LIBRAIRIES DU PROJET ET PREPARATION DU pre-commit
+$ uv run pre-commit install
+      Built splinart @ file:///hoapt list --upgradableme/lcrepeau/splinart
+Uninstalled 1 package in 0.50ms
+Installed 1 package in 2ms
+pre-commit installed at .git/hooks/pre-commit
+# VERIFIER
+$ ls -a
+.  ..  dist  .git  .gitignore  pyproject.toml  .python-version  README.md
+    splinart  splinart.egg-info  tests  uv.lock  .venv
+$ uv add ruff
+Resolved 13 packages in 892ms
+      Built splinart @ file:///home/lcrepeau/splinart
+Prepared 2 packages in 257ms
+Uninstalled 1 package in 0.40ms
+Installed 2 packages in 2ms
+ + ruff==0.15.17
+ ~ splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+# CREATION DU FICHIER
+$ cat > .pre-commit-config.yaml
+repos:
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.15.14
+  hooks:
+    - id: ruff-check
+      args: [ --fix ]
+      files: ^splinart/ # Only backend folder
+      stages: [pre-commit]
+    - id: ruff-format
+      files: ^splinart/ # Only backend folder
+      stages: [pre-commit]
+
+- repo: https://github.com/jackdewinter/pymarkdown
+  rev: v0.9.37
+  hooks:
+    - id: pymarkdown
+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v6.0.0
+  hooks:
+    - id: check-yaml
+    - id: check-toml
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
+# LANCEMENT DU TEST pre-commit
+$ uv run pre-commit run  --all-files
+ruff check...........................................(no files to check)Skipped
+ruff format..........................................(no files to check)Skipped
+PyMarkdown...........................................(no files to check)Skipped
+check yaml...........................................(no files to check)Skipped
+check toml...........................................(no files to check)Skipped
+fix end of files.....................................(no files to check)Skipped
+trim trailing whitespace.............................(no files to check)Skipped
+$ uv add numpy
+Resolved 2 packages in 874ms
+      Built splinart @ file:///home/lcrepeau/splinart
+Prepared 2 packages in 425ms
+Installed 2 packages in 16ms
+ + numpy==2.4.6
+ + splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+$ uv add matplotlib
+Resolved 12 packages in 892ms
+      Built splinart @ file:///home/lcrepeau/splinart
+Prepared 8 packages in 418ms
+Uninstalled 1 package in 0.56ms
+Installed 11 packages in 13ms
+ + contourpy==1.3.3
+ + cycler==0.12.1
+ + fonttools==4.63.0
+ + kiwisolver==1.5.0
+ + matplotlib==3.11.0
+ + packaging==26.2
+ + pillow==12.2.0
+ + pyparsing==3.3.2
+ + python-dateutil==2.9.0.post0
+ + six==1.17.0
+ ~ splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+$ uv add argparse
+Resolved 14 packages in 816ms
+      Built splinart @ file:///home/lcrepeau/splinart
+Prepared 2 packages in 232ms
+Uninstalled 1 package in 0.42ms
+Installed 2 packages in 3ms
+ + argparse==1.4.0
+ ~ splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+$ uv pip freeze
+argparse==1.4.0
+contourpy==1.3.3
+cycler==0.12.1
+fonttools==4.63.0
+kiwisolver==1.5.0
+matplotlib==3.11.0
+numpy==2.4.6
+packaging==26.2
+pillow==12.2.0
+pyparsing==3.3.2
+python-dateutil==2.9.0.post0
+ruff==0.15.17
+six==1.17.0
+-e file:///home/lcrepeau/splinart
+$ uv add pre-commit
+Resolved 24 packages in 919ms
+      Built splinart @ file:///home/lcrepeau/splinart
+Prepared 6 packages in 258ms
+Uninstalled 1 package in 0.44ms
+Installed 11 packages in 6ms
+ + cfgv==3.5.0
+ + distlib==0.4.3
+ + filelock==3.29.4
+ + identify==2.6.19
+ + nodeenv==1.10.0
+ + platformdirs==4.10.0
+ + pre-commit==4.6.0
+ + python-discovery==1.4.2
+ + pyyaml==6.0.3
+ ~ splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+ + virtualenv==21.5.1
+# TEST RUFF
+$ uv run ruff check */*py
+All checks passed!
+# AJOUT pylint EQUIVALENT DE ruff
+$ uv add pylint
+Resolved 31 packages in 889ms
+      Built splinart @ file:///home/lcrepeau/splinart
+Prepared 7 packages in 258ms
+Uninstalled 1 package in 0.46ms
+Installed 7 packages in 4ms
+ + astroid==4.0.4
+ + dill==0.4.1
+ + isort==8.0.1
+ + mccabe==0.7.0
+ + pylint==4.0.6
+ ~ splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+ + tomlkit==0.15.0
+$ uv add sphinx
+Resolved 53 packages in 1.03s
+      Built splinart @ file:///home/lcrepeau/splinart
+Prepared 17 packages in 328ms
+Uninstalled 1 package in 1ms
+Installed 22 packages in 82ms
+ + alabaster==1.0.0
+ + babel==2.18.0
+ + certifi==2026.6.17
+ + charset-normalizer==3.4.7
+ + docutils==0.22.4
+ + idna==3.18
+ + imagesize==2.0.0
+ + jinja2==3.1.6
+ + markupsafe==3.0.3
+ + pygments==2.20.0
+ + requests==2.34.2
+ + roman-numerals==4.1.0
+ + snowballstemmer==3.1.1
+ + sphinx==9.1.0
+ + sphinxcontrib-applehelp==2.0.0
+ + sphinxcontrib-devhelp==2.0.0
+ + sphinxcontrib-htmlhelp==2.1.0
+ + sphinxcontrib-jsmath==1.0.1
+ + sphinxcontrib-qthelp==2.0.0
+ + sphinxcontrib-serializinghtml==2.0.0
+ - splinart==0.1.0 (from file:///home/lcrepeau/formations/tests_python/TPs/3.linter/splinart)
+ + splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+ + urllib3==2.7.0
+```
+
+## MISE AU POINT DES FICHIERS `__init.py__`
+
+Le code est découpé en petits fichiers dans différents répertoires pour que ce
+    soit clair. Il faut que le l'application sache où se trouve quoi. Il faut
+    alors remplir des fichiers `__init.py__` qui setrouvent dans chaque
+    répertoire. Python sait qu'il faut consulter ces fichiers pour retrouver
+    ces petits ainsi que le fichier pyproject.toml à la racine du paquet. La
+    mise au point se fait par étape en consultant les messages d'erreur
+    générés.
+
+```bash
+# LANCEMENT DE L'APPLICATION
+$ splinart
+Traceback (most recent call last):
+  File "/home/lcrepeau/splinart/.venv/bin/splinart", line 10, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/lcrepeau/splinart/splinart/scripts/cli_splinart.py", line 43, in main
+    circle(img)
+    ~~~~~~^^^^^
+  File "/home/lcrepeau/splinart/splinart/scripts/cli_splinart.py", line 10, in circle
+    theta, path = spl.circle([.5, .5], .3, npoints=40)
+                  ^^^^^^^^^^
+AttributeError: module 'splinart' has no attribute 'circle'
+# LE MESSAGE INDIQUE QUE LE MODULE splinart NE TROUVE PAS LA FONCTION circle
+# LA FONCTION SE TROUVE DANS LE REPERTOIRE shapes DANS LE FICHIER base.py
+# PREPARATION des __init.py__
+$ cat > ./splinart/shapes/__init__.py
+from .base import line, circle
+$ cat > ./plinart/__init__.py
+from .shapes import *
+# RELANCEMENT DE L'APPLICATION
+$ splinart
+Traceback (most recent call last):
+  File "/home/lcrepeau/splinart/.venv/bin/splinart", line 10, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/lcrepeau/splinart/splinart/scripts/cli_splinart.py", line 43, in main
+    circle(img)
+    ~~~~~~^^^^^
+  File "/home/lcrepeau/splinart/splinart/scripts/cli_splinart.py", line 11, in circle
+    spl.update_img(img, path, xs_func, nrep=4000, x=theta, scale_value=.00005)
+    ^^^^^^^^^^^^^^
+AttributeError: module 'splinart' has no attribute 'update_img'
+# ON VOIT QUE LE MESSAGE A EVOLUE ET N'EST PLUS LE MEME
+# IL MANQUE DESORMAIS LA FONCTION update_img
+# ELLE SE TROUVE DANS compute.py
+$ cat >> ./plinart/__init__.py
+from .compute import update_img
+# RELANCEMENT DE L'APPLICATION
+$ splinart
+Traceback (most recent call last):
+  File "/home/lcrepeau/splinart/.venv/bin/splinart", line 10, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/lcrepeau/splinart/splinart/scripts/cli_splinart.py", line 43, in main
+    circle(img)
+    ~~~~~~^^^^^
+  File "/home/lcrepeau/splinart/splinart/scripts/cli_splinart.py", line 11, in circle
+    spl.update_img(img, path, xs_func, nrep=4000, x=theta, scale_value=.00005)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lcrepeau/splinart/splinart/compute.py", line 33, in update_img
+    y2 = spline(x, path)
+TypeError: 'module' object is not callable
+# JE N'AI PAS TROUVE L'ERREUR.
+# J'AI RECUPERE LE CODE SUR https://github.com/mfeingesicht/splinart-2026
+```
+
+## CONSTRUCTION DU PAQUET
+
+```bash
+$ $ uv build --sdist --wheel
+Building source distribution...
+running egg_info
+writing splinart.egg-info/PKG-INFO
+writing dependency_links to splinart.egg-info/dependency_links.txt
+writing entry points to splinart.egg-info/entry_points.txt
+writing requirements to splinart.egg-info/requires.txt
+writing top-level names to splinart.egg-info/top_level.txt
+reading manifest file 'splinart.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'splinart.egg-info/SOURCES.txt'
+running sdist
+running egg_info
+writing splinart.egg-info/PKG-INFO
+writing dependency_links to splinart.egg-info/dependency_links.txt
+writing entry points to splinart.egg-info/entry_points.txt
+writing requirements to splinart.egg-info/requires.txt
+writing top-level names to splinart.egg-info/top_level.txt
+reading manifest file 'splinart.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'splinart.egg-info/SOURCES.txt'
+running check
+creating splinart-0.1.0
+creating splinart-0.1.0/splinart
+creating splinart-0.1.0/splinart.egg-info
+creating splinart-0.1.0/splinart/scripts
+creating splinart-0.1.0/splinart/shapes
+creating splinart-0.1.0/splinart/spline
+copying files to splinart-0.1.0...
+copying LICENSE -> splinart-0.1.0
+copying README.md -> splinart-0.1.0
+copying pyproject.toml -> splinart-0.1.0
+copying splinart/__init__.py -> splinart-0.1.0/splinart
+copying splinart/color.py -> splinart-0.1.0/splinart
+copying splinart/compute.py -> splinart-0.1.0/splinart
+copying splinart/draw.py -> splinart-0.1.0/splinart
+copying splinart/version.py -> splinart-0.1.0/splinart
+copying splinart.egg-info/PKG-INFO -> splinart-0.1.0/splinart.egg-info
+copying splinart.egg-info/SOURCES.txt -> splinart-0.1.0/splinart.egg-info
+copying splinart.egg-info/dependency_links.txt -> splinart-0.1.0/splinart.egg-info
+copying splinart.egg-info/entry_points.txt -> splinart-0.1.0/splinart.egg-info
+copying splinart.egg-info/requires.txt -> splinart-0.1.0/splinart.egg-info
+copying splinart.egg-info/top_level.txt -> splinart-0.1.0/splinart.egg-info
+copying splinart/scripts/__init__.py -> splinart-0.1.0/splinart/scripts
+copying splinart/scripts/cli_splinart.py -> splinart-0.1.0/splinart/scripts
+copying splinart/shapes/__init__.py -> splinart-0.1.0/splinart/shapes
+copying splinart/shapes/base.py -> splinart-0.1.0/splinart/shapes
+copying splinart/spline/__init__.py -> splinart-0.1.0/splinart/spline
+copying splinart/spline/spline.py -> splinart-0.1.0/splinart/spline
+copying splinart/spline/splint.py -> splinart-0.1.0/splinart/spline
+copying splinart.egg-info/SOURCES.txt -> splinart-0.1.0/splinart.egg-info
+Writing splinart-0.1.0/setup.cfg
+Creating tar archive
+removing 'splinart-0.1.0' (and everything under it)
+Building wheel...
+running egg_info
+writing splinart.egg-info/PKG-INFO
+writing dependency_links to splinart.egg-info/dependency_links.txt
+writing entry points to splinart.egg-info/entry_points.txt
+writing requirements to splinart.egg-info/requires.txt
+writing top-level names to splinart.egg-info/top_level.txt
+reading manifest file 'splinart.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'splinart.egg-info/SOURCES.txt'
+running bdist_wheel
+running build
+running build_py
+copying splinart/draw.py -> build/lib/splinart
+copying splinart/__init__.py -> build/lib/splinart
+copying splinart/color.py -> build/lib/splinart
+copying splinart/compute.py -> build/lib/splinart
+copying splinart/version.py -> build/lib/splinart
+copying splinart/scripts/cli_splinart.py -> build/lib/splinart/scripts
+copying splinart/scripts/__init__.py -> build/lib/splinart/scripts
+copying splinart/spline/spline.py -> build/lib/splinart/spline
+copying splinart/spline/__init__.py -> build/lib/splinart/spline
+copying splinart/spline/splint.py -> build/lib/splinart/spline
+copying splinart/shapes/base.py -> build/lib/splinart/shapes
+copying splinart/shapes/__init__.py -> build/lib/splinart/shapes
+running egg_info
+writing splinart.egg-info/PKG-INFO
+writing dependency_links to splinart.egg-info/dependency_links.txt
+writing entry points to splinart.egg-info/entry_points.txt
+writing requirements to splinart.egg-info/requires.txt
+writing top-level names to splinart.egg-info/top_level.txt
+reading manifest file 'splinart.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'splinart.egg-info/SOURCES.txt'
+installing to build/bdist.linux-x86_64/wheel
+running install
+running install_lib
+creating build/bdist.linux-x86_64/wheel
+creating build/bdist.linux-x86_64/wheel/splinart
+copying build/lib/splinart/draw.py -> build/bdist.linux-x86_64/wheel/./splinart
+creating build/bdist.linux-x86_64/wheel/splinart/scripts
+copying build/lib/splinart/scripts/cli_splinart.py -> build/bdist.linux-x86_64/wheel/./splinart/scripts
+copying build/lib/splinart/scripts/__init__.py -> build/bdist.linux-x86_64/wheel/./splinart/scripts
+creating build/bdist.linux-x86_64/wheel/splinart/spline
+copying build/lib/splinart/spline/spline.py -> build/bdist.linux-x86_64/wheel/./splinart/spline
+copying build/lib/splinart/spline/__init__.py -> build/bdist.linux-x86_64/wheel/./splinart/spline
+copying build/lib/splinart/spline/splint.py -> build/bdist.linux-x86_64/wheel/./splinart/spline
+copying build/lib/splinart/__init__.py -> build/bdist.linux-x86_64/wheel/./splinart
+copying build/lib/splinart/color.py -> build/bdist.linux-x86_64/wheel/./splinart
+copying build/lib/splinart/compute.py -> build/bdist.linux-x86_64/wheel/./splinart
+copying build/lib/splinart/version.py -> build/bdist.linux-x86_64/wheel/./splinart
+creating build/bdist.linux-x86_64/wheel/splinart/shapes
+copying build/lib/splinart/shapes/base.py -> build/bdist.linux-x86_64/wheel/./splinart/shapes
+copying build/lib/splinart/shapes/__init__.py -> build/bdist.linux-x86_64/wheel/./splinart/shapes
+running install_egg_info
+Copying splinart.egg-info to build/bdist.linux-x86_64/wheel/./splinart-0.1.0-py3.13.egg-info
+running install_scripts
+creating build/bdist.linux-x86_64/wheel/splinart-0.1.0.dist-info/WHEEL
+creating '/home/lcrepeau/splinart/dist/.tmp-ewl1wniq/splinart-0.1.0-py3-none-any.whl'
+    and adding 'build/bdist.linux-x86_64/wheel' to it
+adding 'splinart/__init__.py'
+adding 'splinart/color.py'
+adding 'splinart/compute.py'
+adding 'splinart/draw.py'
+adding 'splinart/version.py'
+adding 'splinart/scripts/__init__.py'
+adding 'splinart/scripts/cli_splinart.py'
+adding 'splinart/shapes/__init__.py'
+adding 'splinart/shapes/base.py'
+adding 'splinart/spline/__init__.py'
+adding 'splinart/spline/spline.py'
+adding 'splinart/spline/splint.py'
+adding 'splinart-0.1.0.dist-info/licenses/LICENSE'
+adding 'splinart-0.1.0.dist-info/METADATA'
+adding 'splinart-0.1.0.dist-info/WHEEL'
+adding 'splinart-0.1.0.dist-info/entry_points.txt'
+adding 'splinart-0.1.0.dist-info/top_level.txt'
+adding 'splinart-0.1.0.dist-info/RECORD'
+removing build/bdist.linux-x86_64/wheel
+Successfully built dist/splinart-0.1.0.tar.gz
+Successfully built dist/splinart-0.1.0-py3-none-any.whl
+# VERIFICATION
+$ tar tzvf dist/splinart-0.1.0.tar.gz
+drwxr-xr-x lcrepeau/lmdpol   0 2026-06-17 15:43 splinart-0.1.0/
+-rw-r--r-- lcrepeau/lmdpol 1512 2026-06-17 13:17 splinart-0.1.0/LICENSE
+-rw-r--r-- lcrepeau/lmdpol 1716 2026-06-17 15:43 splinart-0.1.0/PKG-INFO
+-rw-r--r-- lcrepeau/lmdpol  352 2026-06-17 13:40 splinart-0.1.0/README.md
+-rw-r--r-- lcrepeau/lmdpol 1950 2026-06-17 15:42 splinart-0.1.0/pyproject.toml
+-rw-r--r-- lcrepeau/lmdpol   38 2026-06-17 15:43 splinart-0.1.0/setup.cfg
+drwxr-xr-x lcrepeau/lmdpol    0 2026-06-17 15:43 splinart-0.1.0/splinart/
+-rw-r--r-- lcrepeau/lmdpol  275 2026-06-17 15:07 splinart-0.1.0/splinart/__init__.py
+-rw-r--r-- lcrepeau/lmdpol  196 2026-06-17 13:17 splinart-0.1.0/splinart/color.py
+-rw-r--r-- lcrepeau/lmdpol 3165 2026-06-17 15:10 splinart-0.1.0/splinart/compute.py
+-rw-r--r-- lcrepeau/lmdpol 1927 2026-06-17 15:14 splinart-0.1.0/splinart/draw.py
+drwxr-xr-x lcrepeau/lmdpol    0 2026-06-17 15:43 splinart-0.1.0/splinart/scripts/
+-rw-r--r-- lcrepeau/lmdpol   80 2026-06-17 13:17 splinart-0.1.0/splinart/scripts/__init__.py
+-rw-r--r-- lcrepeau/lmdpol 1950 2026-06-17 13:17 splinart-0.1.0/splinart/scripts/cli_splinart.py
+drwxr-xr-x lcrepeau/lmdpol    0 2026-06-17 15:43 splinart-0.1.0/splinart/shapes/
+-rw-r--r-- lcrepeau/lmdpol  163 2026-06-17 13:17 splinart-0.1.0/splinart/shapes/__init__.py
+-rw-r--r-- lcrepeau/lmdpol 1319 2026-06-17 13:17 splinart-0.1.0/splinart/shapes/base.py
+drwxr-xr-x lcrepeau/lmdpol    0 2026-06-17 15:43 splinart-0.1.0/splinart/spline/
+-rw-r--r-- lcrepeau/lmdpol  189 2026-06-17 13:17 splinart-0.1.0/splinart/spline/__init__.py
+-rw-r--r-- lcrepeau/lmdpol 1042 2026-06-17 13:17 splinart-0.1.0/splinart/spline/spline.py
+-rw-r--r-- lcrepeau/lmdpol 1057 2026-06-17 13:17 splinart-0.1.0/splinart/spline/splint.py
+-rw-r--r-- lcrepeau/lmdpol   47 2026-06-17 15:43 splinart-0.1.0/splinart/version.py
+drwxr-xr-x lcrepeau/lmdpol    0 2026-06-17 15:43 splinart-0.1.0/splinart.egg-info/
+-rw-r--r-- lcrepeau/lmdpol 1716 2026-06-17 15:43 splinart-0.1.0/splinart.egg-info/PKG-INFO
+-rw-r--r-- lcrepeau/lmdpol  516 2026-06-17 15:43 splinart-0.1.0/splinart.egg-info/SOURCES.txt
+-rw-r--r-- lcrepeau/lmdpol    1 2026-06-17 15:43 splinart-0.1.0/splinart.egg-info/dependency_links.txt
+-rw-r--r-- lcrepeau/lmdpol   64 2026-06-17 15:43 splinart-0.1.0/splinart.egg-info/entry_points.txt
+-rw-r--r-- lcrepeau/lmdpol   80 2026-06-17 15:43 splinart-0.1.0/splinart.egg-info/requires.txt
+-rw-r--r-- lcrepeau/lmdpol    9 2026-06-17 15:43 splinart-0.1.0/splinart.egg-info/top_level.txt
+```
+
+## Analyse de code statique
+
+Installation des paquets `ruff` et `pylint` pour les comparer.
+
+```bash
+$ cd splinart
+splinart$ ls
+color.py  compute.py  draw.py  __init__.py  __pycache__  scripts  shapes
+    spline  version.py
+
+splinart$ ruff check color.py --select ALL
+All checks passed!
+splinart$ ruff format color.py
+1 file left unchanged
+$ cat color.py
+# Author:
+#     Loic Gouarin <loic.gouarin@gmail.com>
+#
+# License: BSD 3 clause
+"""Define the default color of the output."""
+
+DEFAULT_COLOR = (0.0, 0.41568627450980394, 0.61960784313725492, 1.0)
+```
+
+## Faire la doc de son projet
+
+```bash
+$ cd splinart
+splinart$
+# INSTALLER sphinx
+splinart$ uv add sphinx
+...
+# CREER UN REPERTOIRE docs
+splinart$ mkdir doc ; cd docs
+# AJOUTER LIBRAIRIE
+$ uv add numpydoc
+warning: `VIRTUAL_ENV=/home/lcrepeau/formations/tests_python/TPs/1.packaging/
+   step0/splinart/.venv` does not match the project environment path
+   `/home/lcrepeau/splinart/.venv` and will be ignored; use `--active` to target
+   the active environment instead
+Resolved 82 packages in 1.02s
+      Built splinart @ file:///home/lcrepeau/splinart
+Prepared 2 packages in Package255ms
+Uninstalled 1 package in 0.54ms
+Installed 2 packages in 3ms
+ + numpydoc==1.10.0
+ ~ splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+# AJOUTER LIBRAIRIE
+$ uv add myst_parser
+warning: `VIRTUAL_ENV=/home/lcrepeau/formations/tests_python/TPs/1.packaging/
+   step0/splinart/.venv` does not match the project environment path
+   `/home/lcrepeau/splinart/.venv` and will be ignored; use `--active` to target
+   the active environment instead
+Resolved 86 packages in 918ms
+      Built splinart @ file:///home/lcrepeau/splinart
+Prepared 5 packages in 259ms
+Uninstalled 1 package in 0.54ms
+Installed 5 packages in 6ms
+ + markdown-it-py==4.2.0
+ + mdit-py-plugins==0.6.1
+ + mdurl==0.1.2
+ + myst-parser==5.1.0
+ ~ splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+# AJOUTER LIBRAIRIE
+$ uv add nbsphinx
+warning: `VIRTUAL_ENV=/home/lcrepeau/formations/tests_python/TPs/1.packaging/
+   step0/splinart/.venv` does not match the project environment path
+   `/home/lcrepeau/splinart/.venv` and will be ignored; use `--active` to target
+   the active environment instead
+Resolved 80 packages in 1.26s
+      Built splinart @ file:///home/lcrepeau/splinart
+Prepared 25 packages in 272ms
+Uninstalled 1 package in 0.56ms
+Installed 26 packages in 16ms
+ + attrs==26.1.0
+ + beautifulsoup4==4.15.0
+ + bleach==6.4.0
+ + defusedxml==0.7.1
+ + fastjsonschema==2.21.2
+ + jsonschema==4.26.0
+ + jsonschema-specifications==2025.9.1
+ + jupyter-client==8.9.1
+ + jupyter-core==5.9.1
+ + jupyterlab-pygments==0.3.0
+ + mistune==3.2.1
+ + nbclient==0.11.0
+ + nbconvert==7.17.1
+ + nbformat==5.10.4
+ + nbsphinx==0.9.8
+ + pandocfilters==1.5.1
+ + pyzmq==27.1.0
+ + referencing==0.37.0
+ + rpds-py==2026.5.1
+ + soupsieve==2.8.4
+ ~ splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+ + tinycss2==1.5.1
+ + tornado==6.5.7
+ + traitlets==5.15.1
+ + typing-extensions==4.15.0
+ + webencodings==0.5.1
+ $ uv add nbsphinx-link
+Resolved 81 packages in 1.06s
+      Built splinart @ file:///home/lcrepeau/splinart
+Prepared 2 packages in 240ms
+Uninstalled 1 package in 0.51ms
+Installed 2 packages in 3ms
+ + nbsphinx-linkLoic Gouarin==1.4.1
+ ~ splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+# INITIALISER LE PROJET DOCUMENTATIONS EN REPONDANT AUX QUESTIONS
+$ uv run sphinx-quickstart
+Bienvenue dans le kit de démarrage rapide de Sphinx 9.1.0.
+
+Veuillez saisir des valeurs pour les paramètres suivants (tapez Entrée pour
+ accepter la valeur par défaut, lorsque celle-ci est indiquée entre crochets).
+
+Chemin racine sélectionné : .
+
+Vous avez deux options pour l'emplacement du répertoire de construction de la
+    sortie de Sphinx.  Soit vous utilisez un répertoire "_build" dans le chemin
+    racine, soit vous séparez les répertoires "source" et "build" dans le
+    chemin racine.
+> Séparer les répertoires source et de sortie (y/n) [n]: y
+
+Le nom du projet apparaîtra à plusieurs endroits dans la documentation
+    construite.
+> Nom du projet: Splinart 2026
+> Nom(s) de(s) l'auteur(s): Loic Gouarin
+> Version du projet []: 0.1.0
+
+Si les documents doivent être rédigés dans une langue autre que l’anglais,
+    vous pouvez sélectionner une langue ici grâce à son identifiant. Sphinx
+    utilisera ensuite cette langue pour traduire les textes que lui-même génère.
+
+Pour une liste des identifiants supportés, voir
+https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-language.
+> Langue du projet [en]: fr
+
+Fichier en cours de création /home/lcrepeau/splinart/docs/source/conf.py.
+Fichier en cours de création /home/lcrepeau/splinart/docs/source/index.rst.
+Fichier en cours de création /home/lcrepeau/splinart/docs/Makefile.
+Fichier en cours de création /home/lcrepeau/splinart/docs/make.bat.
+
+Terminé : la structure initiale a été créée.
+
+Vous devez maintenant compléter votre fichier principal
+    /home/lcrepeau/splinart/docs/source/index.rst et créer d'autres fichiers
+    sources de documentation. Utilisez le Makefile pour construire la
+    documentation comme ceci :
+    make builder
+    où « builder » est l'un des constructeurs disponibles, tel que html,
+    latex, ou linkcheck.
+$ ls
+build  make.bat  Makefile  source
+docs$ tree -f
+.
+├── ./build
+├── ./make.bat
+├── ./Makefile
+└── ./source
+    ├── ./source/conf.py
+    ├── ./source/index.rst
+    ├── ./source/_static
+    └── ./source/_templates
+
+5 directories, 4 files
+# GENERER LA DOC EN FICHIER rst
+cd ..
+$ uv run --active sphinx-apidoc -f -o docs/source/api splinart
+# VERIFICATIONS
+$ tree -f docs/source
+.
+├── ./api
+│   ├── ./api/modules.rst
+│   ├── ./api/splinart.rst
+│   ├── ./api/splinart.scripts.rst
+│   ├── ./api/splinart.shapes.rst
+│   └── ./api/splinart.spline.rst
+├── ./conf.py
+├── ./index.rst
+├── ./\_static
+└── ./\_templates
+# FAIRE LES FICHIERS HTML A PARTIR DES FICHIERS rst CI-DESSUS
+$ cd docs
+docs $ ls
+build  make.bat  Makefile  source
+docs $ uv run make html
+Sphinx v9.1.0 en cours d'exécution
+chargement des traductions [fr]... fait
+chargement de l'environnement pickled... La configuration a changé (2 options :
+    'nbsphinx_requirejs_options', 'nbsphinx_requirejs_path')
+fait
+[autosummary] engendrement d’un auto-sommaire pour :
+api/modules.rst,
+api/splinart.rst,
+api/splinart.scripts.rst,
+api/splinart.shapes.rst,
+api/splinart.spline.rst,
+index.rst
+myst v5.1.0: MdParserConfig(...)
+Écriture du résultat du modèle évalué dans
+    /home/lcrepeau/splinart/docs/build/html/_static/nbsphinx-code-cells.css
+construction en cours [mo] : cibles périmées pour les fichiers po 0
+écriture...
+construction [html] : cibles périmées pour les fichiers sources 1
+mise à jour de l'environnement : 0 ajouté(s), 1 modifié(s), 0 supprimé(s)
+lecture des sources... [100%] index
+recherche des fichiers périmés... aucun résultat trouvé
+Environnement de sérialisation... fait
+vérification de la cohérence... fait
+documents en préparation... fait
+copie des ressources...
+Copie des fichiers statiques...
+Écriture du résultat du modèle évalué dans
+    /home/lcrepeau/splinart/docs/build/html/_static/documentation_options.js
+Écriture du résultat du modèle évalué dans
+    /home/lcrepeau/splinart/docs/build/html/_static/language_data.js
+Écriture du résultat du modèle évalué dans
+    /home/lcrepeau/splinart/docs/build/html/_static/basic.css
+Écriture du résultat du modèle évalué dans
+    /home/lcrepeau/splinart/docs/build/html/_static/alabaster.css
+Copie des fichiers statiques: fait
+copie des fichiers complémentaires...
+copie des fichiers complémentaires: fait
+copie des ressources: fait
+écriture... [100%] index
+génération des index... genindex py-modindex fait
+copying linked files...
+copying notebooks ...
+Écriture des pages additionnelles... search fait
+Export de l'index de recherche en French (code: fr)... fait
+Export de l'inventaire des objets... fait
+La compilation a réussi.
+
+Les pages HTML sont dans build/html.
+# VERIFICATIONS
+docs $ cd build
+docs/build $ tree -f html
+html
+├── html/api
+│   ├── html/api/modules.html
+│   ├── html/api/splinart.html
+│   ├── html/api/splinart.scripts.html
+│   ├── html/api/splinart.shapes.html
+│   └── html/api/splinart.spline.html
+├── html/genindex.html
+├── html/index.html
+├── html/objects.inv
+├── html/py-modindex.html
+├── html/search.html
+├── html/searchindex.js
+├── html/\_sources
+│   ├── html/\_sources/api
+│   │   ├── html/\_sources/api/modules.rst.txt
+│   │   ├── html/\_sources/api/splinart.rst.txt
+│   │   ├── html/\_sources/api/splinart.scripts.rst.txt
+│   │   ├── html/\_sources/api/splinart.shapes.rst.txt
+│   │   └── html/\_sources/api/splinart.spline.rst.txt
+│   └── html/\_sources/index.rst.txt
+└── html/\_static
+    ├── html/\_static/alabaster.css
+    ├── html/\_static/base-stemmer.js
+    ├── html/\_static/basic.css
+    ├── html/\_static/custom.css
+    ├── html/\_static/doctools.js
+    ├── html/\_static/documentation_options.js
+    ├── html/\_static/file.png
+    ├── html/\_static/french-stemmer.js
+    ├── html/\_static/github-banner.svg
+    ├── html/\_static/language_data.js
+    ├── html/\_static/minus.png
+    ├── html/\_static/nbsphinx-broken-thumbnail.svg
+    ├── html/\_static/nbsphinx-code-cells.css
+    ├── html/\_static/nbsphinx-gallery.css
+    ├── html/\_static/nbsphinx-no-thumbnail.svg
+    ├── html/\_static/plus.png
+    ├── html/\_static/pygments.css
+    ├── html/\_static/searchtools.js
+    ├── html/\_static/sphinx_highlight.js
+    └── html/\_static/translations.js
+
+5 directories, 37 files
+
+docs/build $ cd ../source
+# VERIFICATION conf.py
+docs/source $ cat conf.py
+"""Configuration file for the Sphinx documentation builder."""  # noqa: INP001
+#
+# For the full list of built-in configuration values, see the documentation:
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
+
+# -- Project information -----------------------------------------------------
+
+project = "Splinart 2026"
+copyright = "2026, Loic Gouarin"  # noqa: A001
+author = "Loic Gouarin"
+release = "0.1.0"
+
+# -- General configuration ---------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#
+
+extensions = [
+    "sphinx.ext.autodoc",
+    "numpydoc",
+    "myst_parser",
+    "nbsphinx",
+    "nbsphinx_link",
+]
+
+templates\_path = ["\_templates"]
+exclude\_patterns = ["**.ipynb_checkpoints"]
+
+language = "fr"
+
+# -- Options for HTML output -------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#
+
+html_theme = "alabaster"
+html_static_path = ["_static"]
+# VERIFICATION ndex.rst
+docs/source $ cat index.rst
+.. Splinart 2026 documentation master file, created by
+   sphinx-quickstart on Fri Jun 19 16:43:28 2026.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Splinart 2026 documentation
+===========================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   api/modules
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+```
+
+### VISUALISATIONS CREEES PAR sphinx
+
+#### HOME
+
+![graph][internal-source1]
+
+[internal-source1]: images/sphinx_splinart_home.png 'Home'
+
+#### INDEX
+
+![graph][internal-source2]
+
+[internal-source2]: images/sphinx_splinart_index.png 'index'
+
+### INDEX DU PACKAGE
+
+![graph][internal-source3]
+
+[internal-source3]: images/sphinx_splinart_index_module.png 'index du package'
+
+### PAGE DE RECHERCHE
+
+![graph][internal-source4]
+
+[internal-source4]: images/sphinx_splinart_recherche.png 'Recherche'
+
+#### PAGE DU CLI
+
+![graph][internal-source5]
+
+[internal-source5]: images/sphinx_splinart_scripts_cli_splinart.png 'Cli'
+
+#### PAGE DU PACKAGE
+
+![graph][internal-source6]
+
+[internal-source6]: images/sphinx_splinart_package.png 'Package'
+
+#### INDEX DES PAGES
+
+![graph][internal-source7]
+
+[internal-source7]: images/sphinx_splinart.png 'Index des pages'
+
+### ESSAI A PARTIR DE FICHIERS markdown AU LIEU DE rst
+
+```bash
+# CREATION D'UN REPERTOIRE DEDIE
+$ mkdir docs_md ; cd docs_md
+# INITIALISER LE DEPOT SPHINX
+docs_md $  uv run sphinx-quickstart
+Bienvenue dans le kit de démarrage rapide de Sphinx 9.1.0.
+
+Veuillez saisir des valeurs pour les paramètres suivants (tapez Entrée pour
+    accepter la valeur par défaut, lorsque celle-ci est indiquée entre crochets
+    ).
+
+Chemin racine sélectionné : .
+
+Vous avez deux options pour l'emplacement du répertoire de construction de
+    la sortie de Sphinx.
+Soit vous utilisez un répertoire "_build" dans le chemin racine, soit vous
+    séparez les répertoires "source" et "build" dans le chemin racine.
+> Séparer les répertoires source et de sortie (y/n) [n]: y
+
+Le nom du projet apparaîtra à plusieurs endroits dans la documentation
+    construite.
+> Nom du projet: splinart ls 2026
+> Nom(s) de(s) l'auteur(s): Loic Gouarin
+> Version du projet []: 0.1.0
+
+Si les documents doivent être rédigés dans une langue autre que l’anglais,
+    vous pouvez sélectionner une langue ici grâce à son identifiant. Sphinx
+    utilisera ensuite cette langue pour traduire les textes que lui-même génère.
+
+Pour une liste des identifiants supportés, voir
+https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-language.
+> Langue du projet [en]: fr
+
+Fichier en cours de création /home/lcrepeau/splinart/docs_md/source/conf.py.
+Fichier en cours de création /home/lcrepeau/splinart/docs_md/source/index.rst.
+Fichier en cours de création /home/lcrepeau/splinart/docs_md/Makefile.
+
+Terminé : la structure initiale a été créée.
+
+Vous devez maintenant compléter votre fichier principal
+    /home/lcrepeau/splinart/docs_md/source/index.rst et créer d'autres
+    fichiers sources de documentation. Utilisez le Makefile pour construire
+    la documentation comme ceci :
+    make builder
+    où « builder » est l'un des constructeurs disponibles, tel que html,
+    latex, ou linkcheck.
+# PREPARER LES FICHIERS DU CODE
+$ $ uv run --active sphinx-apidoc -f -o docs_md2/source/api -s md splinart
+# VERFICATIONS DE CE QUI A ETE CREE
+docs_md $ tree -f
+.
+├── ./build
+├── ./Makefile
+└── ./source
+    ├── ./source/api
+    │   ├── ./source/api/modules.md
+    │   ├── ./source/api/splinart.md
+    │   ├── ./source/api/splinart.scripts.md
+    │   ├── ./source/api/splinart.shapes.md
+    │   └── ./source/api/splinart.spline.md
+    ├── ./source/conf.py
+    ├── ./source/index.rst
+    ├── ./source/_static
+    └── ./source/_templates
+
+6 directories, 8 files
+# GENERE LE HTML A PARTIR DES FICHIERS CI-DESSUS
+cd docs_md
+# AJOUT DE DES LIBRAIRIES PYTHON
+$ uv add Pygments
+Resolved 90 packages in 1.00s
+      Built splinart @ file:///home/lcrepeau/splinart
+Prepared 1 package in 260ms
+Uninstalled 1 package in 0.60ms
+Installed 1 package in 2ms
+ ~ splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+# AJOUT DE l'OUTIL sphinx-autobuild POUR VISUALISER LES MISES A JOUR EN DIRECT
+$  uv add sphinx-autobuildsphinx-autobuild
+Resolved 98 packages in 1.01s
+      Built splinart @ file:///home/lcrepeau/splinart
+Prepared 9 packages in 323ms
+Uninstalled 1 package in 0.68ms
+Installed 10 packages in 11ms
+ + anyio==4.14.0
+ + click==8.4.1
+ + colorama==0.4.6
+ + h11==0.16.0
+ + sphinx-autobuild==2025.8.25
+ ~ splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+ + starlette==1.3.1
+ + uvicorn==0.49.0
+ + watchfiles==1.2.0
+ + websockets==16.0
+```
+
+#### LANCEMENT DE L'AUTOBUILD
+
+Un serveur web est lancé et on peut suivre les mises à jour de la conf ou des
+    pages en direct sur une adresse locale en http::127.0.1:8000. Un `^C` dans
+    la fenêtre permet d'arrêter le serveur web.
+
+```bash
+cd docs_md
+docs_md$ ls
+build  Makefile  source
+docs_md$ uv run sphinx-autobuild source build/html
+[sphinx-autobuild] Starting initial build
+[sphinx-autobuild] > python -m sphinx build source build/html
+Sphinx v9.1.0 en cours d'exécution
+chargement des traductions [fr]... fait
+Conversion de  `source_suffix = '.md'` en `source_suffix = {'.md': 'restructuredtext'}`.
+myst v5.1.0: MdParserConfig(...)
+[autosummary] engendrement d’un auto-sommaire pour :
+api/modules.md,
+api/splinart.md,
+api/splinart.scripts.md,
+api/splinart.shapes.md,
+api/splinart.spline.md,
+index.md
+Écriture du résultat du modèle évalué dans
+    docs_md/build/html/_static/nbsphinx-code-cells.css
+construction en cours [mo] : cibles périmées pour les fichiers po 0
+écriture...
+construction [html] : cibles périmées pour les fichiers sources 6
+mise à jour de l'environnement : [nouvelle configuration] 6 ajouté(s),
+    0 modifié(s), 0 supprimé(s)
+lecture des sources... [100%] index
+<unknown>:1: WARNING: description dupliquée de l'objet splinart.spline.splint,
+    autre instance dans api/splinart.spline, utiliser :no-index: pour l'un d'eux
+recherche des fichiers périmés... aucun résultat trouvé
+Environnement de sérialisation... fait
+vérification de la cohérence... docs_md/source/api/splinart.md: document
+    référencé dans plusieurs arborescences : ['api/modules', 'index'],
+    sélectionnant : index <- api/splinart
+docs_md/source/api/splinart.scripts.md: document référencé dans plusieurs
+    arborescences : ['api/splinart', 'index'], sélectionnant : index <-
+    api/splinart.scripts
+docs_md/source/api/splinart.shapes.md: document référencé dans plusieurs
+    arborescences : ['api/splinart', 'index'], sélectionnant : index <-
+    api/splinart.shapes
+docs_md/source/api/splinart.spline.md: document référencé dans plusieurs
+    arborescences : ['api/splinart', 'index'], sélectionnant : index <-
+    api/splinart.spline
+fait
+documents en préparation... fait
+copie des ressources...
+Copie des fichiers statiques...
+Écriture du résultat du modèle évalué dans
+    docs_md/build/html/_static/documentation_options.js
+Écriture du résultat du modèle évalué dans
+    docs_md/build/html/_static/language_data.js
+Écriture du résultat du modèle évalué dans
+    docs_md/build/html/_static/basic.css
+Écriture du résultat du modèle évalué dans
+    docs_md/build/html/_static/alabaster.css
+Copie des fichiers statiques: fait
+copie des fichiers complémentaires...
+copie des fichiers complémentaires: fait
+copie des ressources: fait
+écriture... [100%] index
+génération des index... genindex py-modindex fait
+copying linked files...
+copying notebooks ...
+Écriture des pages additionnelles... search fait
+Export de l'index de recherche en French (code: fr)... fait
+Export de l'inventaire des objets... fait
+La compilation a réussi, 1 avertissement.
+
+Les pages HTML sont dans build/html.
+[sphinx-autobuild] Serving on http://127.0.0.1:8000
+[sphinx-autobuild] Waiting to detect changes...
+^C
+docs_md $
+```
+
+#### MODIFICATIONS DES FICHIERS MD
+
+Les fichiers ci-dessous contennaient des consignes shpinx qui étaient
+    affichées directement genre "..automodule" dans la page générée. Il a
+    fallu englober toutes les consignes par des balises pour qu'elles soient
+    interprétées.
+
+```bash
+docs_md $ tree -f
+.
+├── ./build
+├── ./Makefile
+└── ./source
+    ├── ./source/api
+    │   ├── ./source/api/modules.md
+    │   ├── ./source/api/splinart.md
+    │   ├── ./source/api/splinart.scripts.md
+    │   ├── ./source/api/splinart.shapes.md
+    │   └── ./source/api/splinart.spline.md
+    ├── ./source/conf.py
+    ├── ./source/index.rst
+    ├── ./source/_static
+    └── ./source/_templates
+
+6 directories, 8 files
+```
+
+#### EXEMPLE
+
+Dans la page source/api/modules.md nous avions :
+
+``````bash
+splinart
+========
+
+.. toctree::
+   :maxdepth: 4
+
+   splinart
+# APRES MODIFICATION
+splinart
+========
+
+```{eval-rst}
+.. toctree::
+   :maxdepth: 4
+
+   splinart
+```
+``````
+
+C'est à faire pour toutes les consignes sphinx dans tous les fichiers :
+
+* source/index.md
+* source/api/splinart.spline.md
+* source/api/modules.md
+* source/api/splinart.shapes.md
+* source/api/splinart.md
+* source/api/splinart.scripts.md
+
+#### ENSUITE ON RELANCE LA GENERATION DES PAGES HTML
+
+```bash
+docs_md$ uv run make html
+Sphinx v9.1.0 en cours d'exécution
+chargement des traductions [fr]... fait
+Conversion de  `source_suffix = '.md'` en `source_suffix = {'.md':
+    'restructuredtext'}`.
+chargement de l'environnement pickled... La configuration a changé (2 options :
+    'nbsphinx_requirejs_options', 'nbsphinx_requirejs_path')
+fait
+myst v5.1.0: MdParserConfig(...)
+[autosummary] engendrement d’un auto-sommaire pour :
+api/modules.md,
+ api/splinart.md,
+ api/splinart.scripts.md,
+ api/splinart.shapes.md,
+ api/splinart.spline.md, index.md
+Écriture du résultat du modèle évalué dans
+    docs_md/build/html/_static/nbsphinx-code-cells.css
+construction en cours [mo] : cibles périmées pour les fichiers po 0
+écriture...
+construction [html] : cibles périmées pour les fichiers sources 0
+mise à jour de l'environnement : 0 ajouté(s), 0 modifié(s), 0 supprimé(s)
+lecture des sources...
+recherche des fichiers périmés... aucun résultat trouvé
+aucune cible n'est périmée.
+documents en préparation... fait
+copie des ressources...
+Copie des fichiers statiques...
+Écriture du résultat du modèle évalué dans
+    docs_md/build/html/_static/documentation_options.js
+Écriture du résultat du modèle évalué dans
+    docs_md/build/html/_static/language_data.js
+Écriture du résultat du modèle évalué dans
+    docs_md/build/html/_static/basic.css
+Écriture du résultat du modèle évalué dans
+    docs_md/build/html/_static/alabaster.css
+Copie des fichiers statiques: fait
+copie des fichiers complémentaires...
+copie des fichiers complémentaires: fait
+copie des ressources: fait
+génération des index... genindex py-modindex fait
+copying linked files...
+copying notebooks ...
+Écriture des pages additionnelles... search fait
+Export de l'index de recherche en French (code: fr)... fait
+Export de l'inventaire des objets... fait
+La compilation a réussi.
+
+Les pages HTML sont dans build/html
+# ON VERIFIE AVEC LE NAVIGATEUR
+```
+
+### FICHIERS DE CONF
+
+``````bash
+docs_md $ cat source/conf.py
+# Configuration file for the Sphinx documentation builder.
+#
+# For the full list of built-in configuration values, see the documentation:
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
+
+# -- Project information -----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#
+
+project = "Splinart lc 2026"
+copyright = "2026, Loic Gouarin"
+author = "Loic Gouarin"
+release = "0.1.0"
+
+# -- General configuration ---------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#
+
+extensions = ["myst_parser",
+    "sphinx.ext.autodoc",
+    "numpydoc",
+    "nbsphinx",
+    "nbsphinx_link",
+        ]
+
+templates_path = ["_templates"]
+exclude_patterns = ["**.ipynb_checkpoints"]
+
+source_suffix = ".md"
+language = "fr"
+
+# -- Options for HTML output -------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#
+
+html_theme = "alabaster"
+html_static_path = ["_static"]
+
+docs_md $ cat source/index.md
+# Splinart lc 2026 documentation
+
+## User manual
+
+```{toctree}
+:maxdepth: 2
+
+spline
+```
+
+## Index
+
+```{eval-rst}
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+```
+## Tutorial
+
+```{toctree}
+:maxdepth: 2
+
+notebooks/circle
+```
+
+## Reference manual
+
+
+```{toctree}
+   :maxdepth: 2
+   :caption: Contents:
+
+api/modules.md
+api/splinart.md
+api/splinart.scripts.md
+api/splinart.shapes.md
+api/splinart.spline.md
+```
+
+``````
+
+### VISUALISATIONS CREEES PAR sphinx A PARTIR DES md
+
+#### HOME md
+
+![graph][internal-sourcemd1]
+
+[internal-sourcemd1]: images/sphinx_splinart_home_md.png 'Home'
+
+#### INDEX md
+
+![graph][internal-sourcemd2]
+
+[internal-sourcemd2]: images/sphinx_splinart_index_md.png 'index'
+
+### INDEX DU PACKAGE md
+
+![graph][internal-sourcemd3]
+
+[internal-sourcemd3]: images/sphinx_splinart_index_module_md.png 'package'
+
+### PAGE DE RECHERCHE md
+
+![graph][internal-sourcemd4]
+
+[internal-sourcemd4]: images/sphinx_splinart_recherche_md.png 'Recherche'
+
+#### PAGE DU CLI md
+
+![graph][internal-sourcemd5]
+
+[internal-sourcemd5]: images/sphinx_splinart_scripts_cli_splinart_md.png 'Cli'
+
+#### PAGE DU PACKAGE md
+
+![graph][internal-sourcemd6]
+
+[internal-sourcemd6]: images/sphinx_splinart_package_md.png 'Package'
+
+#### INDEX DES PAGES md
+
+![graph][internal-sourcemd7]
+
+[internal-sourcemd7]: images/sphinx_splinart_md.png 'Index des pages'
+
+#### PAGE THEORIE md
+
+![graph][internal-sourcemd8]
+
+[internal-sourcemd8]: images/sphinx_splinart_cubic_spline_md.png 'Théorie'
+
+#### NOTEBOOK md
+
+![graph][internal-sourcemd9]
+
+[internal-sourcemd9]: images/sphinx_splinart_notebook_md.png 'Notebooks'

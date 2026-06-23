@@ -13,7 +13,8 @@ from .spline import spline, splint
 
 def update_path(
     path: np.ndarray,
-    periodic: bool = False,  # noqa: FBT001, FBT002
+    *,
+    periodic: bool = False,
     scale_value: float = 0.00001,
 ) -> None:
     """
@@ -54,9 +55,10 @@ def update_img(  # noqa: PLR0913
     img: np.ndarray,
     path: np.ndarray,
     xs_func: any,
+    *,
     x: np.ndarray = None,
     nrep: int = 300,
-    periodic: bool = True,  # noqa: FBT001, FBT002
+    periodic: bool = True,
     scale_color: float = 0.005,
     color: tuple = DEFAULT_COLOR,
     scale_value: float = 0.00001,
@@ -71,7 +73,7 @@ def update_img(  # noqa: PLR0913
 
     path : np.ndarray
         The y coordinate of the cubic spline if x is not None,
-        the coordinates of the cubic spline if x is None.
+        the coordinates of periodic: bool = True,the cubic spline if x is None.
 
     x : np.ndarray
         The x coordinates of the cubic spline if given.

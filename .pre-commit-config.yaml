@@ -1,4 +1,24 @@
 repos:
+- repo: https://GitHub.com/pre-commit/pre-commit-hooks
+  rev: v6.0.0
+  hooks:
+    - id: check-added-large-files
+    - id: check-case-conflict
+    - id: trailing-whitespace
+    - id: check-merge-conflict
+    - id: check-yaml
+      exclude: recipe/meta.yaml
+    - id: check-json
+    - id: no-commit-to-branch
+    - id: mixed-line-ending
+      args: ["--fix=lf"]
+      description: Forces to replace line ending by the UNIX 'lf' character.
+- repo: https://GitHub.com/Lucas-C/pre-commit-hooks
+  rev: v1.5.6
+  hooks:
+    - id: forbid-tabs
+    - id: remove-tabs
+      args: [--whitespaces-count, "4"]
 - repo: https://github.com/astral-sh/ruff-pre-commit
   rev: v0.15.18
   hooks:
@@ -14,6 +34,7 @@ repos:
   rev: v0.9.38
   hooks:
     - id: pymarkdown
+      exclude: ^(docs_md/source/spline.md|notebooks/circle.md)$
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v6.0.0

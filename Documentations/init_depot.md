@@ -1423,3 +1423,162 @@ src/splinart/version.py                    1      1     0%
 TOTAL                                    139     45    68%
 ==================================== 27 passed in 4.51s ========================
 ```
+
+## FAIRE UN PAQUET
+
+Faire le test que la création du paquet splinart fonctionne toujours suite aux
+    différentes étapes.
+
+```bash
+$ uv build --sdist --wheel
+Building source distribution...
+running egg_info
+writing src/splinart.egg-info/PKG-INFO
+writing dependency_links to src/splinart.egg-info/dependency_links.txt
+writing entry points to src/splinart.egg-info/entry_points.txt
+writing requirements to src/splinart.egg-info/requires.txt
+writing top-level names to src/splinart.egg-info/top_level.txt
+reading manifest file 'src/splinart.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'src/splinart.egg-info/SOURCES.txt'
+running sdist
+running egg_info
+writing src/splinart.egg-info/PKG-INFO
+writing dependency_links to src/splinart.egg-info/dependency_links.txt
+writing entry points to src/splinart.egg-info/entry_points.txt
+writing requirements to src/splinart.egg-info/requires.txt
+writing top-level names to src/splinart.egg-info/top_level.txt
+reading manifest file 'src/splinart.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'src/splinart.egg-info/SOURCES.txt'
+running check
+creating splinart-0.1.0
+creating splinart-0.1.0/src/splinart
+creating splinart-0.1.0/src/splinart.egg-info
+creating splinart-0.1.0/tests
+copying files to splinart-0.1.0...
+copying LICENSE -> splinart-0.1.0
+copying README.md -> splinart-0.1.0
+copying pyproject.toml -> splinart-0.1.0
+copying src/splinart/__init__.py -> splinart-0.1.0/src/splinart
+copying src/splinart/color.py -> splinart-0.1.0/src/splinart
+copying src/splinart/compute.py -> splinart-0.1.0/src/splinart
+copying src/splinart/draw.py -> splinart-0.1.0/src/splinart
+copying src/splinart/version.py -> splinart-0.1.0/src/splinart
+copying src/splinart.egg-info/PKG-INFO -> splinart-0.1.0/src/splinart.egg-info
+copying src/splinart.egg-info/SOURCES.txt -> splinart-0.1.0/src/splinart.egg-info
+copying src/splinart.egg-info/dependency_links.txt -> splinart-0.1.0/src/splinart.egg-info
+copying src/splinart.egg-info/entry_points.txt -> splinart-0.1.0/src/splinart.egg-info
+copying src/splinart.egg-info/requires.txt -> splinart-0.1.0/src/splinart.egg-info
+copying src/splinart.egg-info/top_level.txt -> splinart-0.1.0/src/splinart.egg-info
+copying tests/test_all.py -> splinart-0.1.0/tests
+copying tests/test_shape.py -> splinart-0.1.0/tests
+copying tests/test_spline.py -> splinart-0.1.0/tests
+copying src/splinart.egg-info/SOURCES.txt -> splinart-0.1.0/src/splinart.egg-info
+Writing splinart-0.1.0/setup.cfg
+Creating tar archive
+removing 'splinart-0.1.0' (and everything under it)
+Building wheel...
+running egg_info
+writing src/splinart.egg-info/PKG-INFO
+writing dependency_links to src/splinart.egg-info/dependency_links.txt
+writing entry points to src/splinart.egg-info/entry_points.txt
+writing requirements to src/splinart.egg-info/requires.txt
+writing top-level names to src/splinart.egg-info/top_level.txt
+reading manifest file 'src/splinart.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'src/splinart.egg-info/SOURCES.txt'
+running bdist_wheel
+running build
+running build_py
+copying src/splinart/draw.py -> build/lib/splinart
+copying src/splinart/__init__.py -> build/lib/splinart
+copying src/splinart/color.py -> build/lib/splinart
+copying src/splinart/compute.py -> build/lib/splinart
+copying src/splinart/version.py -> build/lib/splinart
+running egg_info
+writing src/splinart.egg-info/PKG-INFO
+writing dependency_links to src/splinart.egg-info/dependency_links.txt
+writing entry points to src/splinart.egg-info/entry_points.txt
+writing requirements to src/splinart.egg-info/requires.txt
+writing top-level names to src/splinart.egg-info/top_level.txt
+reading manifest file 'src/splinart.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'src/splinart.egg-info/SOURCES.txt'
+installing to build/bdist.linux-x86_64/wheel
+running install
+running install_lib
+creating build/bdist.linux-x86_64/wheel
+creating build/bdist.linux-x86_64/wheel/splinart
+copying build/lib/splinart/draw.py -> build/bdist.linux-x86_64/wheel/./splinart
+creating build/bdist.linux-x86_64/wheel/splinart/scripts
+copying build/lib/splinart/scripts/cli_splinart.py -> build/bdist.linux-x86_64/wheel/./splinart/scripts
+copying build/lib/splinart/scripts/__init__.py -> build/bdist.linux-x86_64/wheel/./splinart/scripts
+creating build/bdist.linux-x86_64/wheel/splinart/spline
+copying build/lib/splinart/spline/spline.py -> build/bdist.linux-x86_64/wheel/./splinart/spline
+copying build/lib/splinart/spline/__init__.py -> build/bdist.linux-x86_64/wheel/./splinart/spline
+copying build/lib/splinart/spline/splint.py -> build/bdist.linux-x86_64/wheel/./splinart/spline
+copying build/lib/splinart/__init__.py -> build/bdist.linux-x86_64/wheel/./splinart
+copying build/lib/splinart/color.py -> build/bdist.linux-x86_64/wheel/./splinart
+copying build/lib/splinart/compute.py -> build/bdist.linux-x86_64/wheel/./splinart
+copying build/lib/splinart/version.py -> build/bdist.linux-x86_64/wheel/./splinart
+creating build/bdist.linux-x86_64/wheel/splinart/shapes
+copying build/lib/splinart/shapes/base.py -> build/bdist.linux-x86_64/wheel/./splinart/shapes
+copying build/lib/splinart/shapes/__init__.py -> build/bdist.linux-x86_64/wheel/./splinart/shapes
+running install_egg_info
+Copying src/splinart.egg-info to build/bdist.linux-x86_64/wheel/./splinart-0.1.0-py3.13.egg-info
+running install_scripts
+creating build/bdist.linux-x86_64/wheel/splinart-0.1.0.dist-info/WHEEL
+creating '/home/lcrepeau/splinart/dist/.tmp-saigts_9/splinart-0.1.0-py3-none-any.whl'
+    and adding 'build/bdist.linux-x86_64/wheel' to it
+adding 'splinart/__init__.py'
+adding 'splinart/color.py'
+adding 'splinart/compute.py'
+adding 'splinart/draw.py'
+adding 'splinart/version.py'
+adding 'splinart/scripts/__init__.py'
+adding 'splinart/scripts/cli_splinart.py'
+adding 'splinart/shapes/__init__.py'
+adding 'splinart/shapes/base.py'
+adding 'splinart/spline/__init__.py'
+adding 'splinart/spline/spline.py'
+adding 'splinart/spline/splint.py'
+adding 'splinart-0.1.0.dist-info/licenses/LICENSE'
+adding 'splinart-0.1.0.dist-info/METADATA'
+adding 'splinart-0.1.0.dist-info/WHEEL'
+adding 'splinart-0.1.0.dist-info/entry_points.txt'
+adding 'splinart-0.1.0.dist-info/top_level.txt'
+adding 'splinart-0.1.0.dist-info/RECORD'
+removing build/bdist.linux-x86_64/wheel
+Successfully built dist/splinart-0.1.0.tar.gz
+Successfully built dist/splinart-0.1.0-py3-none-any.whl
+# VERIFICATION
+$ ls -gG dist/\*
+-rw-r--r-- 1 9816 juin  23 15:23 dist/splinart-0.1.0-py3-none-any.whl
+-rw-r--r-- 1 6249 juin  23 15:23 dist/splinart-0.1.0.tar.gz
+$ tar ztvf dist/splinart-0.1.0.tar.gz
+drwxr-xr-x lcrepeau/lmdpol   0 2026-06-23 15:23 splinart-0.1.0/
+-rw-r--r-- lcrepeau/lmdpol 1512 2026-06-17 13:17 splinart-0.1.0/LICENSE
+-rw-r--r-- lcrepeau/lmdpol 2067 2026-06-23 15:23 splinart-0.1.0/PKG-INFO
+-rw-r--r-- lcrepeau/lmdpol  374 2026-06-19 10:51 splinart-0.1.0/README.md
+-rw-r--r-- lcrepeau/lmdpol 2311 2026-06-23 15:06 splinart-0.1.0/pyproject.toml
+-rw-r--r-- lcrepeau/lmdpol   38 2026-06-23 15:23 splinart-0.1.0/setup.cfg
+drwxr-xr-x lcrepeau/lmdpol    0 2026-06-23 15:23 splinart-0.1.0/src/
+drwxr-xr-x lcrepeau/lmdpol    0 2026-06-23 15:23 splinart-0.1.0/src/splinart/
+-rw-r--r-- lcrepeau/lmdpol  275 2026-06-23 08:50 splinart-0.1.0/src/splinart/__init__.py
+-rw-r--r-- lcrepeau/lmdpol  196 2026-06-23 08:50 splinart-0.1.0/src/splinart/color.py
+-rw-r--r-- lcrepeau/lmdpol 3380 2026-06-23 15:09 splinart-0.1.0/src/splinart/compute.py
+-rw-r--r-- lcrepeau/lmdpol 2112 2026-06-23 08:50 splinart-0.1.0/src/splinart/draw.py
+-rw-r--r-- lcrepeau/lmdpol   47 2026-06-23 08:50 splinart-0.1.0/src/splinart/version.py
+drwxr-xr-x lcrepeau/lmdpol    0 2026-06-23 15:23 splinart-0.1.0/src/splinart.egg-info/
+-rw-r--r-- lcrepeau/lmdpol 2067 2026-06-23 15:23 splinart-0.1.0/src/splinart.egg-info/PKG-INFO
+-rw-r--r-- lcrepeau/lmdpol  425 2026-06-23 15:23 splinart-0.1.0/src/splinart.egg-info/SOURCES.txt
+-rw-r--r-- lcrepeau/lmdpol    1 2026-06-23 15:23 splinart-0.1.0/src/splinart.egg-info/dependency_links.txt
+-rw-r--r-- lcrepeau/lmdpol   64 2026-06-23 15:23 splinart-0.1.0/src/splinart.egg-info/entry_points.txt
+-rw-r--r-- lcrepeau/lmdpol  259 2026-06-23 15:23 splinart-0.1.0/src/splinart.egg-info/requires.txt
+-rw-r--r-- lcrepeau/lmdpol    9 2026-06-23 15:23 splinart-0.1.0/src/splinart.egg-info/top_level.txt
+drwxr-xr-x lcrepeau/lmdpol    0 2026-06-23 15:23 splinart-0.1.0/tests/
+-rw-rw-r-- lcrepeau/lmdpol  735 2026-06-23 11:32 splinart-0.1.0/tests/test_all.py
+-rw-rw-r-- lcrepeau/lmdpol 1246 2026-06-08 10:13 splinart-0.1.0/tests/test_shape.py
+-rw-rw-r-- lcrepeau/lmdpol  866 2026-06-23 15:05 splinart-0.1.0/tests/test_spline.py
+```

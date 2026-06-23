@@ -864,7 +864,7 @@ Indices and tables
 # CREATION D'UN REPERTOIRE DEDIE
 $ mkdir docs_md ; cd docs_md
 # INITIALISER LE DEPOT SPHINX
-docs_md $  uv run sphinx-quickstart
+docs_md $ uv run sphinx-quickstart --suffix md --no-batchfile
 Bienvenue dans le kit de démarrage rapide de Sphinx 9.1.0.
 
 Veuillez saisir des valeurs pour les paramètres suivants (tapez Entrée pour
@@ -881,7 +881,7 @@ Soit vous utilisez un répertoire "_build" dans le chemin racine, soit vous
 
 Le nom du projet apparaîtra à plusieurs endroits dans la documentation
     construite.
-> Nom du projet: splinart ls 2026
+> Nom du projet: splinart lc 2026
 > Nom(s) de(s) l'auteur(s): Loic Gouarin
 > Version du projet []: 0.1.0
 
@@ -907,7 +907,7 @@ Vous devez maintenant compléter votre fichier principal
     où « builder » est l'un des constructeurs disponibles, tel que html,
     latex, ou linkcheck.
 # PREPARER LES FICHIERS DU CODE
-$ $ uv run --active sphinx-apidoc -f -o docs_md2/source/api -s md splinart
+$ uv run --active sphinx-apidoc -f -o docs_md/source/api -s md splinart
 # VERFICATIONS DE CE QUI A ETE CREE
 docs_md $ tree -f
 .
@@ -937,7 +937,7 @@ Uninstalled 1 package in 0.60ms
 Installed 1 package in 2ms
  ~ splinart==0.1.0 (from file:///home/lcrepeau/splinart)
 # AJOUT DE l'OUTIL sphinx-autobuild POUR VISUALISER LES MISES A JOUR EN DIRECT
-$  uv add sphinx-autobuildsphinx-autobuild
+$  uv add sphinx-autobuild
 Resolved 98 packages in 1.01s
       Built splinart @ file:///home/lcrepeau/splinart
 Prepared 9 packages in 323ms

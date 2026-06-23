@@ -1447,7 +1447,7 @@ writing src/splinart.egg-info/PKG-INFO
 writing dependency_links to src/splinart.egg-info/dependency_links.txt
 writing entry points to src/splinart.egg-info/entry_points.txt
 writing requirements to src/splinart.egg-info/requires.txt
-writing top-level names to src/splinart.egg-info/top_level.txt
+writing top-level namesDocumentations/init_depot.md to src/splinart.egg-info/top_level.txt
 reading manifest file 'src/splinart.egg-info/SOURCES.txt'
 adding license file 'LICENSE'
 writing manifest file 'src/splinart.egg-info/SOURCES.txt'
@@ -1581,4 +1581,127 @@ drwxr-xr-x lcrepeau/lmdpol    0 2026-06-23 15:23 splinart-0.1.0/tests/
 -rw-rw-r-- lcrepeau/lmdpol  735 2026-06-23 11:32 splinart-0.1.0/tests/test_all.py
 -rw-rw-r-- lcrepeau/lmdpol 1246 2026-06-08 10:13 splinart-0.1.0/tests/test_shape.py
 -rw-rw-r-- lcrepeau/lmdpol  866 2026-06-23 15:05 splinart-0.1.0/tests/test_spline.py
+```
+
+## INSTALLER UNE INTEGRATION CONTINUE github SUR splinart
+
+```bash
+# CREER UNE NOUVELLE BRANCHE
+$ git checkout -b cicd
+# CREER LES REPERTOIRES POUR LA CI github
+$ mkdir -p .github/workflows
+```
+
+On crée le premier fichier ci où cette action sera lancé sur une pull request
+    vers la branche `main`. Ici on clone le dépôt courant et on installe une
+    version de python 3.13 :
+
+```bash
+# CREER LE PREMIER FICHIER CI
+$ cat > .github/workflows/ci.yml
+name: ci
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.13"
+# VERSIONNEMENT DU FICHIER
+$ git add .github/workflows/ci.yml
+$ git commit -m'Premier essai ci dans .github/workflows/ci.yml.'
+# CONFIGURATION DU POUSSAGE VERS github
+$ git push --set-upstream origin cicd
+X11 forwarding request failed on channel 0
+Énumération des objets: 32, fait.
+Décompte des objets: 100% (32/32), fait.
+Compression par delta en utilisant jusqu'à 4 fils d'exécution
+Compression des objets: 100% (25/25), fait.
+Écriture des objets: 100% (28/28), 3.96 Kio | 270.00 Kio/s, fait.
+Total 28 (delta 12), réutilisés 0 (delta 0), réutilisés du pack 0
+remote: Resolving deltas: 100% (12/12), completed with 3 local objects.
+remote:
+remote: Create a pull request for 'cicd' on GitHub by visiting:
+remote:      https://github.com/lcrepeau/splinart_2026_lc/pull/new/cicd
+remote:
+To github.com:lcrepeau/splinart_2026_lc.git
+ * [new branch]      cicd -> cicd
+La branche 'cicd' est paramétrée pour suivre la branche distante 'cicd' depuis
+    'origin'.
+```
+
+### SUIVI SUR github
+
+Mettre les figures github
+
+### REMARQUES SUR LES GITHUB ACTIONS
+
+Le [Marketplace GitHub Actions](https://github.com/marketplace?type=actions 'la')
+    est une place de marché qui regroupe des milliers d'actions réutilisables
+    créées par GitHub, des éditeurs, et la communauté. C'est un gain de temps
+    énorme. Mais c'est aussi un risque de sécurité majeur si vous ne savez
+    pas évaluer ce que vous allez utiliser (Stéphane Robert).
+
+[Remarques]["lien"]
+
+[lien] <https://blog.stephane-robert.info/docs/pipeline-cicd/github/fondations/marketplace/>
+
+Vérifier régulièrement les versions des github actions que vous utilisez,
+    les développements sont rapides.
+
+**Attention aux fautes de frappes. C'est très dangeureux !**
+
+#### VERIFICATION FICHIER ci.yml
+
+##### actions/checkout@v3
+
+Dans le fichier le clône du dépôt est la version v3 : actions/checkout@v3. Sur
+    [Marketplace GitHub Actions](https://github.com/marketplace?type=actions 'la'),
+    on cherche la version la plus récente en sélectionnant `Verified creators`.
+    Au 20260623 c'est la version v7 qui est la plus récente.
+
+```bash
+# RECHERCHE du sha DE CETTE VERSION
+$ curl -s https://api.github.com/repos/actions/checkout/commits/v7 | jq -r .sha
+9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+# MODIFICATION DU FICHIER ci.yml
+uses: actions/checkout@v3 ->
+    uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+```
+
+##### actions/setup-python@v3
+
+Sur [Marketplace GitHub Actions](https://github.com/marketplace?type=actions 'la'),
+    on cherche la version la plus récente en sélectionnant `Verified creators`.
+    Au 20260623 c'est la version v6 qui est la plus récente.
+
+```bash
+# RECHERCHE du sha DE CETTE VERSION
+$ curl -s https://api.github.com/repos/actions/setup-python/commits/v6 | jq -r .sha
+a309ff8b426b58ec0e2a45f0f869d46889d02405
+# MODIFICATION DU FICHIER ci.yml
+uses: actions/setup-python@v3 ->
+    uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
+```
+
+#### EXEMPLE DE LANCEMENT D'UN PROGRAMME PYTHON
+
+```yaml
+# action.yml
+steps:
+- uses: actions/checkout@v6
+- uses: actions/setup-python@v6
+  with:
+    python-version: '3.13'
+- run: python my_script.py
 ```

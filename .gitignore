@@ -1,7 +1,7 @@
 # FICHIER DE SORTIE
 output.png
-# Python-generated files
-__pycache__/
+# FICHIER INTERM2DIAIRE
+.coverage
 *.py[oc]
 build/
 dist/

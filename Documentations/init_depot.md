@@ -1642,7 +1642,91 @@ La branche 'cicd' est paramétrée pour suivre la branche distante 'cicd' depuis
 
 ### SUIVI SUR github
 
-Mettre les figures github
+Figures des actions sur github pour l'intégration continue :
+
+#### Onglet `Pull request` sur github
+
+![graph][internal-github1]
+
+[internal-github1]: images/github_post_pull_request1.png 'Pull request'
+
+#### Branche disponible
+
+![graph][internal-github2]
+
+[internal-github2]: images/github_post_pull_request2.png
+
+### Clic sur Cicd
+
+![graph][internal-github3]
+
+[internal-github3]: images/github_post_pull_request3.png 'Merge demandé'
+
+### Onglet `Actions`
+
+![graph][internal-github4]
+
+[internal-github4]: images/github_actions1.png 'Onglet Actions'
+
+#### Clic sur Cicd dans `Actions`
+
+![graph][internal-github5]
+
+[internal-github5]: images/github_actions2.png 'Clic sur build'
+
+#### Panneau de retour de la ci
+
+![graph][internal-github6]
+
+[internal-github6]: images/github_actions3.png 'Ci build'
+
+#### Onglet `Set up job` déployé
+
+![graph][internal-github7]
+
+[internal-github7]: images/github_actions4.png 'Set up job'
+
+#### Onglet `Run actions/checkout@v3` déployé
+
+![graph][internal-github8]
+
+[internal-github8]: images/github_actions5.png 'actions/checkout@v3'
+
+#### Onglet `Set up Python 3.13` déployé
+
+![graph][internal-github9]
+
+[internal-github9]: images/github_actions6.png 'Set up Python 3.13'
+
+#### Onglet `Post Set up job` déployé
+
+![graph][internal-github10]
+
+[internal-github10]: images/github_actions7.png 'Post Set up job'
+
+#### Onglet `Post Run actions/checkout@v3` déployé
+
+![graph][internal-github11]
+
+[internal-github11]: images/github_actions8.png 'Post Run actions/checkout@v3'
+
+#### Onglet `Complete job` déployé
+
+![graph][internal-github12]
+
+[internal-github12]: images/github_actions9.png 'Complete job'
+
+#### Coût ci
+
+![graph][internal-github13]
+
+[internal-github13]: images/github_actions_cout_ci.png 'Coût ci'
+
+#### Fichier ci qui a tourné
+
+![graph][internal-github14]
+
+[internal-github14]: images/github_actions_fichier_ci.png 'Fichier ci connu'
 
 ### REMARQUES SUR LES GITHUB ACTIONS
 

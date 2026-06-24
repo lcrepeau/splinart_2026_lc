@@ -1659,7 +1659,7 @@ Le [Marketplace GitHub Actions](https://github.com/marketplace?type=actions 'la'
 Vérifier régulièrement les versions des github actions que vous utilisez,
     les développements sont rapides.
 
-**Attention aux fautes de frappes. C'est très dangeureux !**
+**Attention aux fautes de frappes. C'est très dangereux !**
 
 #### VERIFICATION FICHIER ci.yml
 

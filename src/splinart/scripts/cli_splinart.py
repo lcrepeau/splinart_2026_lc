@@ -17,7 +17,7 @@ def circle(img: np.ndarray) -> None:
     def xs_func() -> float:
         """Xs function."""
         nsamples = 500
-        return (np.random.Generator() + 2 * np.pi * np.linspace(0, 1, nsamples)) % (
+        return (np.random.random() + 2 * np.pi * np.linspace(0, 1, nsamples)) % (  # noqa: NPY002
             2 * np.pi
         )
 
@@ -31,7 +31,7 @@ def line(img: np.ndarray) -> None:
     def xs_func() -> float:
         """Xs function."""
         nsamples = 500
-        return 0.001 * np.random.Generator() + np.linspace(
+        return 0.001 * np.random.random() + np.linspace(  # noqa: NPY002
             beg + 0.1, end - 0.1, nsamples
         )
 

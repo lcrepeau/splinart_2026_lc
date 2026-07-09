@@ -1,4 +1,7 @@
-# Cubic spline
+Cubic spline
+============
+
+.. math::
 
 We consider here a cubic spline passing through the points $(x_i,y_i)$ with $a=x_1<\ldots<x_n=b$, that is, a class function ${\mathcal C}^2$ on $[a, b]$ and each restriction at the interval $[x_{i-1},x_i]$, $1\leq i\leq n$, is a polynomial of degree less than 3. We will note $S$ such a spline. His equation is given by
 

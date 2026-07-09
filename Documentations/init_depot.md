@@ -953,6 +953,16 @@ Installed 10 packages in 11ms
  + uvicorn==0.49.0
  + watchfiles==1.2.0
  + websockets==16.0
+ # EXTENSION POUR LIRE LES FORMULES MATHEMATIQUES
+ $ uv add sphinx-math-dollar
+Resolved 103 packages in 1.10s
+      Built splinart @ file:///home/lcrepeau/splinart
+Prepared 2 packages in 236ms
+Uninstalled 1 package in 0.55ms
+Installed 2 packages in 3ms
+ + sphinx-math-dollar==1.3
+ ~ splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+
 ```
 
 #### LANCEMENT DE L'AUTOBUILD
@@ -1447,7 +1457,7 @@ writing src/splinart.egg-info/PKG-INFO
 writing dependency_links to src/splinart.egg-info/dependency_links.txt
 writing entry points to src/splinart.egg-info/entry_points.txt
 writing requirements to src/splinart.egg-info/requires.txt
-writing top-level names to src/splinart.egg-info/top_level.txt
+writing top-level namesDocumentations/init_depot.md to src/splinart.egg-info/top_level.txt
 reading manifest file 'src/splinart.egg-info/SOURCES.txt'
 adding license file 'LICENSE'
 writing manifest file 'src/splinart.egg-info/SOURCES.txt'
@@ -1581,4 +1591,821 @@ drwxr-xr-x lcrepeau/lmdpol    0 2026-06-23 15:23 splinart-0.1.0/tests/
 -rw-rw-r-- lcrepeau/lmdpol  735 2026-06-23 11:32 splinart-0.1.0/tests/test_all.py
 -rw-rw-r-- lcrepeau/lmdpol 1246 2026-06-08 10:13 splinart-0.1.0/tests/test_shape.py
 -rw-rw-r-- lcrepeau/lmdpol  866 2026-06-23 15:05 splinart-0.1.0/tests/test_spline.py
+```
+
+## INSTALLER UNE INTEGRATION CONTINUE github SUR splinart
+
+```bash
+# CREER UNE NOUVELLE BRANCHE
+$ git checkout -b cicd
+# CREER LES REPERTOIRES POUR LA CI github
+$ mkdir -p .github/workflows
+```
+
+On crée le premier fichier ci où cette action sera lancé sur une pull request
+    vers la branche `main`. Ici on clone le dépôt courant et on installe une
+    version de python 3.13 :
+
+```bash
+# CREER LE PREMIER FICHIER CI
+$ cat > .github/workflows/ci.yml
+name: ci
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.13"
+# VERSIONNEMENT DU FICHIER
+$ git add .github/workflows/ci.yml
+$ git commit -m'Premier essai ci dans .github/workflows/ci.yml.'
+# CONFIGURATION DU POUSSAGE VERS github
+$ git push --set-upstream origin cicd
+X11 forwarding request failed on channel 0
+Énumération des objets: 32, fait.
+Décompte des objets: 100% (32/32), fait.
+Compression par delta en utilisant jusqu'à 4 fils d'exécution
+Compression des objets: 100% (25/25), fait.
+Écriture des objets: 100% (28/28), 3.96 Kio | 270.00 Kio/s, fait.
+Total 28 (delta 12), réutilisés 0 (delta 0), réutilisés du pack 0
+remote: Resolving deltas: 100% (12/12), completed with 3 local objects.
+remote:
+remote: Create a pull request for 'cicd' on GitHub by visiting:
+remote:      https://github.com/lcrepeau/splinart_2026_lc/pull/new/cicd
+remote:
+To github.com:lcrepeau/splinart_2026_lc.git
+ * [new branch]      cicd -> cicd
+La branche 'cicd' est paramétrée pour suivre la branche distante 'cicd' depuis
+    'origin'.
+```
+
+### SUIVI SUR github
+
+Figures des actions sur github pour l'intégration continue :
+
+#### Onglet `Pull request` sur github
+
+![graph][internal-github1]
+
+[internal-github1]: images/github_post_pull_request1.png 'Pull request'
+
+#### Branche disponible
+
+![graph][internal-github2]
+
+[internal-github2]: images/github_post_pull_request2.png
+
+### Clic sur Cicd
+
+![graph][internal-github3]
+
+[internal-github3]: images/github_post_pull_request3.png 'Merge demandé'
+
+### Onglet `Actions`
+
+![graph][internal-github4]
+
+[internal-github4]: images/github_actions1.png 'Onglet Actions'
+
+#### Clic sur Cicd dans `Actions`
+
+![graph][internal-github5]
+
+[internal-github5]: images/github_actions2.png 'Clic sur build'
+
+#### Panneau de retour de la ci
+
+![graph][internal-github6]
+
+[internal-github6]: images/github_actions3.png 'Ci build'
+
+#### Onglet `Set up job` déployé
+
+![graph][internal-github7]
+
+[internal-github7]: images/github_actions4.png 'Set up job'
+
+#### Onglet `Run actions/checkout@v3` déployé
+
+![graph][internal-github8]
+
+[internal-github8]: images/github_actions5.png 'actions/checkout@v3'
+
+#### Onglet `Set up Python 3.13` déployé
+
+![graph][internal-github9]
+
+[internal-github9]: images/github_actions6.png 'Set up Python 3.13'
+
+#### Onglet `Post Set up job` déployé
+
+![graph][internal-github10]
+
+[internal-github10]: images/github_actions7.png 'Post Set up job'
+
+#### Onglet `Post Run actions/checkout@v3` déployé
+
+![graph][internal-github11]
+
+[internal-github11]: images/github_actions8.png 'Post Run actions/checkout@v3'
+
+#### Onglet `Complete job` déployé
+
+![graph][internal-github12]
+
+[internal-github12]: images/github_actions9.png 'Complete job'
+
+#### Coût ci
+
+![graph][internal-github13]
+
+[internal-github13]: images/github_actions_cout_ci.png 'Coût ci'
+
+#### Fichier ci qui a tourné
+
+![graph][internal-github14]
+
+[internal-github14]: images/github_actions_fichier_ci.png 'Fichier ci connu'
+
+### REMARQUES SUR LES GITHUB ACTIONS
+
+Le [Marketplace GitHub Actions](https://github.com/marketplace?type=actions 'la')
+    est une place de marché qui regroupe des milliers d'actions réutilisables
+    créées par GitHub, des éditeurs, et la communauté. C'est un gain de temps
+    énorme. Mais c'est aussi un risque de sécurité majeur si vous ne savez
+    pas évaluer ce que vous allez utiliser (Stéphane Robert).
+
+[Remarques]["lien"]
+
+[lien] <https://blog.stephane-robert.info/docs/pipeline-cicd/github/fondations/marketplace/>
+
+Vérifier régulièrement les versions des github actions que vous utilisez,
+    les développements sont rapides.
+
+**Attention aux fautes de frappes. C'est très dangereux !**
+
+#### VERIFICATION FICHIER ci.yml
+
+##### actions/checkout@v3
+
+Dans le fichier le clône du dépôt est la version v3 : actions/checkout@v3. Sur
+    [Marketplace GitHub Actions](https://github.com/marketplace?type=actions 'la'),
+    on cherche la version la plus récente en sélectionnant `Verified creators`.
+    Au 20260623 c'est la version v7 qui est la plus récente.
+
+```bash
+# RECHERCHE du sha DE CETTE VERSION
+$ curl -s https://api.github.com/repos/actions/checkout/commits/v7 | jq -r .sha
+9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+# MODIFICATION DU FICHIER ci.yml
+uses: actions/checkout@v3 ->
+    uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+```
+
+##### actions/setup-python@v3
+
+Sur [Marketplace GitHub Actions](https://github.com/marketplace?type=actions 'la'),
+    on cherche la version la plus récente en sélectionnant `Verified creators`.
+    Au 20260623 c'est la version v6 qui est la plus récente.
+
+```bash
+# RECHERCHE du sha DE CETTE VERSION
+$ curl -s https://api.github.com/repos/actions/setup-python/commits/v6 | jq -r .sha
+a309ff8b426b58ec0e2a45f0f869d46889d02405
+# MODIFICATION DU FICHIER ci.yml
+uses: actions/setup-python@v3 ->
+    uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
+```
+
+#### EXEMPLE DE LANCEMENT D'UN PROGRAMME PYTHON
+
+```yaml
+# action.yml
+steps:
+- uses: actions/checkout@v6
+- uses: actions/setup-python@v6
+  with:
+    python-version: '3.13'
+- run: python my_script.py
+```
+
+### INSTALLER LE GITHUB RUNNER EN LOCAL
+
+Au 20260623 voir le [lien](https://lindevs.com/install-act-on-ubuntu/).
+
+```bash
+$ wget -qO act.tar.gz https://github.com/nektos/act/releases/latest/download/act_Linux_x86_64.tar.gz
+# Extract act executable file to /usr/local/bin directory:
+sudo tar xf act.tar.gz -C /usr/local/bin act
+# Now the act command can be used for all users as a system-wide command.
+# We can check act version as follows:
+$ act --version
+act version 0.2.89
+# Remove tar.gz file:
+$ rm -rf act.tar.gz
+# Testing act Clone the sample repository for testing:
+$ git clone https://github.com/cplee/github-actions-demo.git
+# Run the act command and specify working directory with -C option to run
+# GitHub Actions locally:
+$ act -C github-actions-demo
+# LANCER LE TEST essai UNIQUEMENT
+$ act -C github-actions-demo -j essai
+# For the first time, you will be asked to choose the image to be used as default.
+# You can select Medium size image. It can be changed later in ~/.actrc
+# configuration file.
+# The act run jobs defined in YAML file which stored in github/workflows directory:
+
+[CI/test] Start image=ghcr.io/catthehacker/ubuntu:act-latest
+......
+[CI/test] *  Run actions/checkout@v2
+[CI/test]   Success - actions/checkout@v2
+[CI/test] *  Run actions/setup-node@v1
+......
+[CI/test]   Success - actions/setup-node@v1
+[CI/test] *  Run npm install
+......
+[CI/test]   Success - npm install
+[CI/test] *  Run npm test
+......
+|   GET /
+|     ✓ should respond with hello world
+|
+|
+|   1 passing (28ms)
+|
+[CI/test]   Success - npm test
+
+# Uninstall act If act is no longer needed, remove the executable file:
+$ sudo rm -rf /usr/local/bin/act
+# You can also remove configuration file and cache:
+$ rm -rf ~/.actrc ~/.cache/act
+#
+# OPTIONS DE act
+#
+$ act --help
+Run GitHub actions locally by specifying the event name (e.g. `push`) or an
+    action name directly.
+
+Usage:
+  act [event name to run] [flags]
+
+If no event name passed, will default to "on: push"
+If actions handles only one event it will be used as default instead of
+    "on: push"
+
+Flags:
+      --action-cache-path string                          Defines the path where
+    the actions get cached and host workspaces created. (default
+    "/home/lcrepeau/.cache/act")
+      --action-offline-mode                               If action contents
+    exists, it will not be fetch and pull again. If turn on this, will turn off
+    force pull
+  -a, --actor string                                      user that triggered
+    the event (default "nektos/act")
+      --artifact-server-addr string                       Defines the address
+    to which the artifact server binds. (default "129.104.56.198")
+      --artifact-server-path string                       Defines the path where
+    the artifact server stores uploads and retrieves downloads from. If not
+    specified the artifact server will not start.
+      --artifact-server-port string                       Defines the port
+    where the artifact server listens. (default "34567")
+  -b, --bind                                              bind working directory
+    to container, rather than copy
+      --bug-report                                        Display system
+    information for bug report
+      --cache-server-addr string                          Defines the address to
+    which the cache server binds. (default "129.104.56.198")
+      --cache-server-external-url string                  Defines the external
+    URL for if the cache server is behind a proxy. e.g.:
+    https://act-cache-server.example.com. Be careful that there is no trailing slash.
+      --cache-server-path string                          Defines the path where
+    the cache server stores caches. (default "/home/lcrepeau/.cache/actcache")
+      --cache-server-port uint16                          Defines the port where
+    the artifact server listens. 0 means a randomly available port.
+      --concurrent-jobs int                               Maximum number of
+    concurrent jobs to run. Default is the number of CPUs available.
+      --container-architecture string                     Architecture which
+    should be used to run containers, e.g.: linux/amd64. If not specified, will
+    use host default architecture. Requires Docker server API Version 1.41+.
+    Ignored on earlier Docker server platforms.
+      --container-cap-add stringArray                     kernel capabilities to
+    add to the workflow containers (e.g. --container-cap-add SYS_PTRACE)
+      --container-cap-drop stringArray                    kernel capabilities to
+    remove from the workflow containers (e.g. --container-cap-drop SYS_PTRACE)
+      --container-daemon-socket string                    URI to Docker Engine
+    socket (e.g.: unix://~/.docker/run/docker.sock or - to disable bind mounting
+    the socket)
+      --container-options string                          Custom docker
+    container options for the job container without an options property in thei
+    job definition
+      --defaultbranch string                              the name of the main
+    branch
+      --detect-event                                      Use first event type
+    from workflow as event that triggered the workflow
+  -C, --directory string                                  working directory
+    (default ".")
+  -n, --dryrun                                            disable container
+    creation, validates only workflow correctness
+      --env stringArray                                   env to make available
+    to actions with optional value (e.g. --env myenv=foo or --env myenv)
+      --env-file string                                   environment file to
+    read and use as env in the containers (default ".env")
+  -e, --eventpath string                                  path to event JSON
+    file
+      --github-instance string                            GitHub instance toi
+    use. Only use this when using GitHub Enterprise Server. (default "github.com")
+  -g, --graph                                             draw workflows
+  -h, --help                                              help for act
+      --input stringArray                                 action input to make
+    available to actions (e.g. --input myinput=foo)
+      --input-file string                                 input file to read
+    and use as action input (default ".input")
+      --insecure-secrets                                  NOT RECOMMENDED!
+    Doesn't hide secrets while printing logs.
+  -j, --job string                                        run a specific job ID
+      --json                                              Output logs in json
+    format
+  -l, --list                                              list workflows
+      --list-options                                      Print a json structure
+    of compatible options
+      --local-repository stringArray                      Replaces the specified
+    repository and ref with a local folder (e.g. https://github.com/test/test@v0
+    =/home/act/test or test/test@v0=/home/act/test, the latter matches any hosts
+    or protocols)
+      --log-prefix-job-id                                 Output the job id
+    within non-json logs instead of the entire name
+      --man-page                                          Print a generated
+    manual page to stdout
+      --matrix stringArray                                specify which matrix
+    configuration to include (e.g. --matrix java:13
+      --network string                                    Sets a docker network
+    name. Defaults to host. (default "host")
+      --no-cache-server                                   Disable cache server
+      --no-recurse                                        Flag to disable
+    running workflows from subdirectories of specified path '--workflows'/'-W'
+    flag
+      --no-skip-checkout                                  Use actions/checkout
+    instead of copying local files into container
+  -P, --platform stringArray                              custom image to use
+     per platform (e.g. -P ubuntu-18.04=nektos/act-environments-ubuntu:18.04)
+      --privileged                                        use privileged mode
+  -p, --pull                                              pull docker image(s)
+     even if already present (default true)
+  -q, --quiet                                             disable logging of
+     output from steps
+      --rebuild                                           rebuild local action
+     docker image(s) even if already present (default true)
+      --remote-name string                                git remote name that
+     will be used to retrieve url of git repo (default "origin")
+      --replace-ghe-action-token-with-github-com string   If you are using
+    replace-ghe-action-with-github-com and you want to use private actions oni
+    GitHub, you have to set personal access token
+      --replace-ghe-action-with-github-com stringArray    If you are using
+    GitHub Enterprise Server and allow specified actions from GitHub
+    (github.com), you can set actions on this.
+    (e.g. --replace-ghe-action-with-github-com =github/super-linter)
+  -r, --reuse                                             don't remove
+    container(s) on successfully completed workflow(s) to maintain state between
+    runs
+      --rm                                                automatically remove
+    container(s)/volume(s) after a workflow(s) failure
+  -s, --secret stringArray                                secret to make
+    available to actions with optional value (e.g. -s mysecret=foo or
+    -s mysecret)
+      --secret-file string                                file with list of
+    secrets to read from (e.g. --secret-file .secrets) (default ".secrets")
+      --strict                                            use strict workflow
+    schema
+      --use-gitignore                                     Controls whether paths
+    specified in .gitignore should be copied into container (default true)
+      --use-new-action-cache                              Enable using the new
+    Action Cache for storing Actions locally
+      --userns string                                     user namespace to use
+      --validate                                          validate workflows
+      --var stringArray                                   variable to make
+    available to actions with optional value (e.g. --var myvar=foo or
+    --var myvar)
+      --var-file string                                   file with list of
+    vars to read from (e.g. --var-file .vars) (default ".vars")
+  -v, --verbose                                           verbose output
+      --version                                           version for act
+  -w, --watch                                             watch the contents of
+    the local repo and run when files change
+  -W, --workflows string                                  path to workflow
+    file(s) (default "./.github/workflows/")
+# AFFICHER LA LISTE DES ETIQUETTES CONNUES
+splinart$ act -l
+INFO[0000] Using docker host 'unix:///var/run/docker.sock', and daemon socket 'unix:///var/run/docker.sock'
+Stage  Job ID           Job name             Workflow name     Workflow file  Events
+0      build            build                ci                ci.yml         pull_request
+0      pre-commit       python               ci_splinart_2026  ci1.yml        pull_request
+0      build            build                ci                ci_test.yml    pull_request
+0      make_sdist       Make SDist and weel  publish           publish.yml    release
+0      release-please   release-please       release-please    realease.yml   workflow_dispatch
+1      tests            python               ci_splinart_2026  ci1.yml        pull_request
+1      upload_on_conda  upload_on_conda      publish           publish.yml    release
+1      upload_on_pypi   upload_on_pypi       publish           publish.yml    release
+# LANCER QU'UN FICHIER yml S'IL Y EN A PLUSIEURS (VOIR CI-DESSUS)
+$ act -W .github/workflows/<file_name>.yml
+# LANCER UN FICHIER yml S'IL Y EN A PLUSIEURS (VOIR CI-DESSUS) ET UNE ETIQUETTE
+# -r POUR GARDER LE RUNNER A L'ISSUE DE LA CI POUR POUVOIR LA REUTILISER
+$ act -W .github/workflows/<file_name>.yml -j test -r
+# 4. Verify the Deployment
+#   After pushing changes to your main branch, check the Actions tab in your repository
+#   to ensure the workflow runs successfully.
+#   Access your documentation at https://<username>.github.io/<repository>.
+```
+
+### ERREUR en cours
+
+```bash
+$ act -W .github/workflows/ci_publish_sphinx.yml -j build -r \
+    --artifact-server-path /tmp/artifacts
+INFO[0000] Using docker host 'unix:///var/run/docker.sock', and daemon socket
+INFO[0000] Start server on http://129.104.56.198:34567
+[ci_splinart_2026/python] ⭐ Run Set up job
+[ci_splinart_2026/python] 🚀  Start image=catthehacker/ubuntu:act-latest
+[ci_splinart_2026/python]   🐳  docker pull image=catthehacker/ubuntu:act-latest
+[ci_splinart_2026/python]   🐳  docker create image=catthehacker/ubuntu:act-latest
+[ci_splinart_2026/python]   🐳  docker run image=catthehacker/ubuntu:act-latest
+[ci_splinart_2026/python]   🐳  docker exec cmd=[node --no-warnings \
+    -e console.log(process.execPath)] user= workdir=
+[ci_splinart_2026/python]   ✅  Success - Set up job
+[ci_splinart_2026/python]   ☁  git clone 'https://github.com/astral-sh/setup-uv'\
+     # ref=08807647e7069bb48b6ef5acd8ec9567f424441b
+[ci_splinart_2026/python]   ☁  git clone 'https://github.com/actions/upload-pages-artifact'\
+     # ref=fc324d3547104276b827a68afc52ff2a11cc49c9
+[ci_splinart_2026/python] ⭐ Run Pre Upload artifact
+[ci_splinart_2026/python]   ☁  git clone 'https://github.com/actions/upload-artifact'\
+     # ref=bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+[ci_splinart_2026/python]   ✅  Success - Pre Upload artifact [1.11947227s]
+[ci_splinart_2026/python] ⭐ Run Main Cloner le depot
+[ci_splinart_2026/python]   🐳  docker cp src=/home/lcrepeau/splinart/. \
+    dst=/home/lcrepeau/splinart
+[ci_splinart_2026/python]   ✅  Success - Main Cloner le depot [760.878735ms]
+[ci_splinart_2026/python] ⭐ Run Main Install uv
+| Trying to find version for uv in: /home/lcrepeau/splinart/uv.toml
+| Could not find file: /home/lcrepeau/splinart/uv.toml
+| Trying to find version for uv in: /home/lcrepeau/splinart/pyproject.toml
+| Could not determine uv version from uv.toml or pyproject.toml. Falling back
+| Fetching manifest data from \
+    https://raw.githubusercontent.com/astral-sh/versions/main/v1/uv.ndjson ...
+| Found uv in tool-cache for 0.11.24
+| Added /root/.local/bin to the path
+| Added /opt/hostedtoolcache/uv/0.11.24/x86_64 to the path
+| Set UV_PYTHON_INSTALL_DIR to /root/.local/share/uv/python
+| Added /root/.local/share/uv/python to the path
+[ci_splinart_2026/python]   ❓ add-matcher
+| Successfully installed uv version 0.11.24
+[ci_splinart_2026/python]   ✅  Success - Main Install uv [1.221664759s]
+[ci_splinart_2026/python]   ⚙  ::set-env:: UV_PYTHON_INSTALL_DIR=/root/.local/share/uv/python
+[ci_splinart_2026/python]   ⚙  ::set-output:: uv-path=/opt/hostedtoolcache/uv/0.11.24/x86_64/uv
+[ci_splinart_2026/python]   ⚙  ::set-output:: uvx-path=/opt/hostedtoolcache/uv/0.11.24/x86_64/uvx
+[ci_splinart_2026/python]   ⚙  ::set-output:: uv-version=0.11.24
+[ci_splinart_2026/python]   ⚙  ::set-output:: python-version=3.13.14
+[ci_splinart_2026/python]   ⚙  ::add-path:: /root/.local/bin
+[ci_splinart_2026/python]   ⚙  ::add-path:: /opt/hostedtoolcache/uv/0.11.24/x86_64
+[ci_splinart_2026/python]   ⚙  ::add-path:: /root/.local/share/uv/python
+[ci_splinart_2026/python] ⭐ Run Main Install the project
+[ci_splinart_2026/python]   🐳  docker exec cmd=[bash -e /var/run/act/workflow/2]
+| Resolved 102 packages in 36ms
+    Built splinart @ file:///home/lcrepeau/formations/tests_python/TPs/3.linter
+Prepared 1 package in 1.14s
+| Uninstalled 1 package in 1ms
+|[0/1] Installing wheels...
+Installed 1 package in 3ms
+|  ~ splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+[ci_splinart_2026/python]   ✅  Success - Main Install the project [1.519652919s]
+[ci_splinart_2026/python] ⭐ Run Main Install Pandoc
+[ci_splinart_2026/python]   🐳  docker exec cmd=[bash -e /var/run/act/workflow/3]
+Hit:1 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease
+Hit:2 http://archive.ubuntu.com/ubuntu noble InRelease
+Get:3 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Hit:4 https://ppa.launchpadcontent.net/git-core/ppa/ubuntu noble InRelease
+Get:5 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Hit:6 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+Get:7 http://security.ubuntu.com/ubuntu noble-security/main Packages [976 kB]
+Get:8 http://security.ubuntu.com/ubuntu noble-security/universe ges [1487 kB]
+Get:9 http://security.ubuntu.com/ubuntu noble-security/restricted [1339 kB]
+Get:10 http://archive.ubuntu.com/ubuntu noble-updates/restricted [1412 kB]
+Get:11 http://archive.ubuntu.com/ubuntu noble-updates/universe  [2108 kB]
+Get:12 http://archive.ubuntu.com/ubuntu noble-updates/main Packages [1296 kB]
+Hit:13 https://packagecloud.io/github/git-lfs/ubuntu noble InRelease
+Fetched 8869 kB in 2s (5492 kB/s)
+Reading package lists... Done
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+| pandoc is already the newest version (3.1.3+ds-2).
+| 0 upgraded, 0 newly installed, 0 to remove and 19 not upgraded.
+| pandoc 3.1.3
+| Features: -server +lua
+| Scripting engine: Lua 5.4
+| User data directory: /root/.local/share/pandoc
+| Copyright (C) 2006-2023 John MacFarlane. Web: https://pandoc.org
+| This is free software; see the source for copying conditions. There is no
+| warranty, not even for merchantability or fitness for a particular purpose.
+| /usr/bin/pandoc
+[ci_splinart_2026/python]   ✅  Success - Main Install Pandoc [4.594071253s]
+[ci_splinart_2026/python] ⭐ Run Main Run sphinx api doc
+[ci_splinart_2026/python]   🐳  docker exec cmd=[bash -e /var/run/act/workflow/4]
+| Running Sphinx v9.1.0
+| loading translations [fr]... done
+| WARNING: html_static_path entry '_static' does not exist
+| Converting `source_suffix = '.rst'` to `source_suffix = {'.rst': 'restructuredtext'}`.
+| loading pickled environment... The configuration has changed
+    (3 options: 'nbsphinx_custom_formats', 'nbsphinx_requirejs_options',
+    'nbsphinx_requirejs_path')
+| done
+| [autosummary] generating autosummary for: api/modules.md, api/splinart.md,
+     api/splinart.scripts.md, api/splinart.shapes.md, api/splinart.spline.md,
+     index.md, notebooks/circle.nblink, spline.md
+| myst v5.1.0:
+| Writing evaluated template result to docs_md/build/html/_static/nbsphinx-code-cells.css
+| building [mo]: targets for 0 po files that are out of date
+| writing output...
+| building [html]: targets for 0 source files that are out of date
+| updating environment: [config changed ('nbsphinx_custom_formats')]\
+    8 added, 0 changed, 0 removed
+reading sources... [100%] spline
+| WARNING: multiple files found for the document "index": index.md, index.rst
+| Use _StrPath('/home/lcrepeau/splinart/docs_md/source/index.md') for the build.
+| WARNING: multiple files found for the document "spline": spline.rst, spline.md
+| Use _StrPath('/home/lcrepeau/splinart/docs_md/source/spline.md') for the build.
+| looking for now-outdated files... none found
+| pickling environment... done
+| checking consistency... done
+| preparing documents... done
+| copying assets...
+| copying static files...
+| Writing evaluated template result to docs_md/build/html/_static/documentation_options.js
+| Writing evaluated template result to docs_md/build/html/_static/language_data.js
+| Writing evaluated template result to docs_md/build/html/_static/basic.css
+| Writing evaluated template result to docs_md/build/html/_static/alabaster.css
+| copying static files: done
+| copying extra files...
+| copying extra files: done
+| copying assets: done
+writing output... [100%] spline
+| /home/lcrepeau/splinart/docs_md/source/notebooks/circle.nblink:: WARNING:
+| /home/lcrepeau/splinart/docs_md/source/notebooks/circle.nblink:: WARNING:
+| /home/lcrepeau/splinart/docs_md/source/notebooks/circle.nblink:: WARNING:
+| /home/lcrepeau/splinart/docs_md/source/notebooks/circle.nblink:: WARNING:
+| /home/lcrepeau/splinart/docs_md/source/notebooks/circle.nblink:: WARNING:
+| /home/lcrepeau/splinart/docs_md/source/notebooks/circle.nblink:: WARNING:
+| /home/lcrepeau/splinart/docs_md/source/notebooks/circle.nblink:: WARNING:
+| /home/lcrepeau/splinart/docs_md/source/notebooks/circle.nblink:: WARNING:
+| /home/lcrepeau/splinart/docs_md/source/notebooks/circle.nblink:: WARNING:
+| /home/lcrepeau/splinart/docs_md/source/notebooks/circle.nblink:: WARNING:
+| /home/lcrepeau/splinart/docs_md/source/notebooks/circle.nblink:: WARNING:
+| /home/lcrepeau/splinart/docs_md/source/notebooks/circle.nblink:: WARNING:
+| /home/lcrepeau/splinart/docs_md/source/notebooks/circle.nblink:: WARNING:
+| /home/lcrepeau/splinart/docs_md/source/notebooks/circle.nblink:: WARNING:
+| generating indices... genindex done
+| copying linked files...
+  copying notebooks ... [100%] notebooks/circle.ipynb
+| writing additional pages... search done
+copying images... [100%] ../build/doctrees/nbsphinx/notebooks_circle_22_0.png
+| dumping search index in French (code: fr)... done
+| dumping object inventory... done
+| build succeeded, 22 warnings.
+|
+| The HTML pages are in build/html.
+[ci_splinart_2026/python]   ✅  Success - Main Run sphinx api doc [4.170595222s]
+[ci_splinart_2026/python] ⭐ Run Main Upload artifact
+[ci_splinart_2026/python] ⭐ Run Main Archive artifact
+[ci_splinart_2026/python]   🐳  docker exec \
+   cmd=[sh -e /var/run/act/workflow/5-composite-0.sh] user= workdir=
+[ci_splinart_2026/python]   ❓  ::group::Archive artifact
+| ./
+| ./_sources/
+| ./_sources/notebooks/
+| ./_sources/notebooks/circle.nblink.txt
+| ./_sources/index.md.txt
+| ./_sources/api/
+| ./_sources/api/modules.md.txt
+| ./_sources/api/splinart.spline.md.txt
+| ./_sources/api/splinart.md.txt
+| ./_sources/api/splinart.scripts.md.txt
+| ./_sources/api/splinart.shapes.md.txt
+| ./_sources/spline.md.txt
+| ./objects.inv
+| ./notebooks/
+| ./notebooks/circle.ipynb
+| ./notebooks/circle.html
+| ./_static/
+| ./_static/documentation_options.js
+| ./_static/github-banner.svg
+| ./_static/base-stemmer.js
+| ./_static/nbsphinx-no-thumbnail.svg
+| ./_static/nbsphinx-code-cells.css
+| ./_static/language_data.js
+| ./_static/french-stemmer.js
+| ./_static/alabaster.css
+| ./_static/plus.png
+| ./_static/custom.css
+| ./_static/pygments.css
+| ./_static/file.png
+| ./_static/nbsphinx-broken-thumbnail.svg
+| ./_static/searchtools.js
+| ./_static/basic.css
+| ./_static/sphinx_highlight.js
+| ./_static/translations.js
+| ./_static/doctools.js
+| ./_static/minus.png
+| ./_static/nbsphinx-gallery.css
+| ./api/
+| ./api/splinart.html
+| ./api/modules.html
+| ./api/splinart.spline.html
+| ./api/splinart.scripts.html
+| ./api/splinart.shapes.html
+| ./search.html
+| ./index.html
+| ./genindex.html
+| ./_images/
+| ./_images/notebooks_circle_19_1.png
+| ./_images/notebooks_circle_22_0.png
+| ./_images/notebooks_circle_16_1.png
+| ./_images/notebooks_circle_13_1.png
+| ./_images/notebooks_circle_4_1.png
+| ./searchindex.js
+| ./spline.html
+[ci_splinart_2026/python]   ❓  ::endgroup::
+[ci_splinart_2026/python]   ✅  Success - Main Archive artifact [84.140873ms]
+[ci_splinart_2026/python] ⭐ Run Main Upload artifact
+[ci_splinart_2026/python]   🐳  docker cp src=/home/lcrepeau/.cache/act/actions-upload-artifact
+[ci_splinart_2026/python]   🐳  docker exec cmd=[/opt/acttoolcache/node/24.17.0/x64/bin/node
+| With the provided path, there will be 1 file uploaded
+| Artifact name is valid!
+| Root directory input is valid!
+ERRO[0019] Error decode request body: proto: (line 1:140): unknown field "mime_type"
+| Attempt 1 of 5 failed error: Unexpected end of JSON. Retrying in 3000 ms...
+ERRO[0022] Error decode request body: proto: (line 1:140): unknown field "mime_type"
+| Attempt 2 of 5 failed error: Unexpected end of JSON. Retrying in 4510 ms...
+ERRO[0026] Error decode request body: proto: (line 1:140): unknown field "mime_type"
+| Attempt 3 of 5 failed error: Unexpected end of JSON. Retrying in 8354 ms...
+ERRO[0035] Error decode request body: proto: (line 1:140): unknown field "mime_type"
+| Attempt 4 of 5 failed error: Unexpected end of JSON. Retrying in 15078 ms...
+ERRO[0050] Error decode request body: proto: (line 1:140): unknown field "mime_type"
+[ci_splinart_2026/python]   ❗  ::error::Failed to CreateArtifact: Failed to
+    make request after 5 attempts: Unexpected end of JSON input
+[ci_splinart_2026/python]   ❌  Failure - Main Upload artifact [31.52579249s]
+[ci_splinart_2026/python] exitcode '1': failure
+[ci_splinart_2026/python]   ⚙  ::set-output:: artifact_id=
+[ci_splinart_2026/python]   ❌  Failure - Main Upload artifact [31.812797758s]
+[ci_splinart_2026/python] exitcode '1': failure
+[ci_splinart_2026/python] ⭐ Run Post Upload artifact
+[ci_splinart_2026/python]   🐳  docker cp src=/home/lcrepeau/.cache/act/actions-upload-pages-artifact
+[ci_splinart_2026/python]   ✅  Success - Post Upload artifact [47.596225ms]
+[ci_splinart_2026/python] ⭐ Run Complete job
+[ci_splinart_2026/python]   ✅  Success - Complete job
+[ci_splinart_2026/python] 🏁  Job failed
+Error: Job 'python' failed
+```
+
+### INSTALLATION DE myst
+
+```bash
+$ uv add mystmd
+Resolved 102 packages in 1.52s
+      Built splinart @ file:///home/lcrepeau/splinart
+Prepared 4 packages in 239ms
+Uninstalled 4 packages in 23ms
+Installed 5 packages in 4ms
+ + mystmd==1.10.1
+ - nodeenv==1.10.0
+ + nodeenv==1.9.1
+ - platformdirs==4.10.0
+ + platformdirs==4.2.2
+ ~ splinart==0.1.0 (from file:///home/lcrepeau/splinart)
+ - virtualenv==21.5.1
+ + virtualenv==20.39.1
+ uv run myst init
+❗ Node.js (node) is required to run MyST, but could not be found`.
+❔ Install Node.js in '/home/lcrepeau/.local/share/myst/20.0.0'? (y/N): y
+⚙️  Attempting to install Node.js in /home/lcrepeau/.local/share/myst/20.0.0 ...
+ℹ️  Successfully installed Node.js 20.0.0
+building myst-cli session with API URL: https://api.mystmd.org
+🍡 Execution parallelism set to: 3
+
+Welcome to the MyST CLI! 🎉 🚀
+
+myst init walks you through creating a myst.yml file.
+
+You can use MyST to:
+
+ - create interactive websites from markdown and Jupyter Notebooks 📈
+ - build & export professional PDFs and Word documents 📄
+
+Learn more about this CLI and MyST Markdown at: https://mystmd.org
+
+
+💾 Updating .gitignore
+💾 Writing new project and site config file: myst.yml
+...
+
+```
+
+```bash
+$ uv run myst init --gh-pages
+building myst-cli session with API URL: https://api.mystmd.org
+🍡 Execution parallelism set to: 3
+📝 Creating a GitHub Action to deploy your MyST Site
+
+? What branch would you like to deploy from? main
+? What would you like to call the action? deploy.yml
+
+🎉 GitHub Action is configured:
+
+.github/workflows/deploy.yml
+
+✅ Next Steps
+
+1. Navigate to your GitHub Pages settings
+
+    https://github.com/lcrepeau/splinart_2026_lc/settings/pages
+
+2. Enable GitHub Pages
+3. Use GitHub Actions as the source
+4. Push these changes (and/or merge to main)
+5. Look for a new action to start
+
+    https://github.com/lcrepeau/splinart_2026_lc/actions
+
+6. Once the action completes, your site should be deployed at:
+
+    https://lcrepeau.github.io/splinart_2026_lc
+
+7. 🎉 Celebrate and tell us about your site on BlueSky or Mastodon! 🐦 🐘
+
+```
+
+```bash
+$ cat .github/workflows/deploy.yml
+# This file was created automatically with `myst init --gh-pages` 🪄 💚
+# Ensure your GitHub Pages settings for this repository are set to deploy with
+# **GitHub Actions**.
+
+name: MyST GitHub Pages Deploy
+on:
+  push:
+    # Runs on pushes targeting the default branch
+    branches: [main]
+env:
+  # `BASE_URL` determines, relative to the root of the domain, the URL that
+  # your site is served from.
+  # E.g., if your site lives at `https://mydomain.org/myproject`,
+  # set `BASE_URL=/myproject`.
+  # If, instead, your site lives at the root of the domain, at
+  # `https://mydomain.org`, set `BASE_URL=''`.
+  BASE_URL: /${{ github.event.repository.name }}
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+# Allow only one concurrent deployment, skipping runs queued between the run
+# in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production
+#  deployments to complete.
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+      - name: Install MyST
+        run: npm install -g mystmd
+      - name: Build HTML Assets
+        run: myst build --html
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './_build/html'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 ```

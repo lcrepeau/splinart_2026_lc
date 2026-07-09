@@ -13,3 +13,7 @@ pip install splinart
 or
 
 conda install -c gouarin splinart
+
+## PUBLICATION CODE
+
+[ici](https://lcrepeau.github.io/splinart_2026_lc/ 'un jour')

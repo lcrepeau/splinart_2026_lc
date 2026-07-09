@@ -14,9 +14,9 @@ release = "0.1.0"
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["myst_parser",
-    "sphinx.ext.autodoc",
+extensions = [ "sphinx.ext.autodoc",
     "numpydoc",
+    "myst_parser",
     "nbsphinx",
     "nbsphinx_link",
         ]
@@ -24,7 +24,7 @@ extensions = ["myst_parser",
 templates_path = ["_templates"]
 exclude_patterns = ["**.ipynb_checkpoints"]
 
-source_suffix = ".md"
+source_suffix = ".rst"
 language = "fr"
 
 # -- Options for HTML output -------------------------------------------------
@@ -35,6 +35,8 @@ html_static_path = ["_static"]
 
 # INTERPRETATION DES FORMULES MATHEMATIQUES
 myst_enable_extensions = ["dollarmath", "amsmath"]
+myst_heading_anchors = 3
+myst_render_example_code = True
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"

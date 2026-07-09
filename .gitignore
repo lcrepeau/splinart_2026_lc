@@ -6,7 +6,12 @@ output.png
 build/
 dist/
 wheels/
+docs_md/build_prod/
+docs_md/source_old/
 *.egg-info
 
 # Virtual environments
 .venv
+
+# MyST build outputs
+_build

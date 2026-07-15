@@ -4,8 +4,8 @@
 # License: BSD 3 clause
 """Splinart package."""
 
-from splinart.compute import update_img, update_path
-
+from . import version
+from .compute import update_img, update_path
 from .draw import save_img, show_img
 from .scripts.cli_splinart import main
 from .shapes import circle, line
@@ -21,4 +21,5 @@ __all__ = [
     "splint",
     "update_img",
     "update_path",
+    "version",
 ]

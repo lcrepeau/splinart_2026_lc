@@ -25,6 +25,9 @@ jobs:
     steps:
       - id: install_pandoc
         run: sudo apt-get install pandoc
+      - name: Cloner le depot
+        uses: actions/checkout@v7
+
       - name: Install uv
         uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
 

@@ -1,6 +1,9 @@
 name: ci_splinart_2026
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches: [main]
 

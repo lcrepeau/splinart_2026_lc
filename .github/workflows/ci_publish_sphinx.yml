@@ -39,10 +39,14 @@ jobs:
           uv run --active sphinx-apidoc -f -o docs_md/source/api src/splinart
           cd ./docs_md
           uv run make html
-
+          tree -f build
       - name: Deploy to GitHub Pages
+
         id: deployment
         uses: sphinx-notes/pages@v3
         with:
           python_version: 3.13
           documentation_path: /docs_md/source
+      - name: verify file html availables
+        run: |
+          tree -f /docs/build

@@ -37,6 +37,8 @@ jobs:
       - name: Run sphinx api doc
         run: |
           uv run --active sphinx-apidoc -f -o docs_md/source/api src/splinart
+          cd ./docs_md
+          uv run make html
 
       - name: Deploy to GitHub Pages
         id: deployment

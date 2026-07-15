@@ -65,3 +65,4 @@ jobs:
         uses: sphinx-notes/pages@v3
         with:
           python_version: 3.13
+          documentation_path: /docs_md

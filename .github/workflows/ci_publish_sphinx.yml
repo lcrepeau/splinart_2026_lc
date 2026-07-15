@@ -25,6 +25,10 @@ jobs:
     steps:
       - id: install_pandoc
         run: sudo apt-get install pandoc
+      - name: Run sphinx api doc
+        run: |
+          uv run --active sphinx-apidoc -f -o docs_md/source/api src/splinart
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: sphinx-notes/pages@v3

@@ -5,46 +5,8 @@ on:
     branches: [main]
 
 jobs:
-  # Build job
-  build:
-    # <Not provided for brevity>
-    # At a minimum this job should upload artifacts using actions/upload-pages-artifact
-    name: python
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Cloner le depot
-        uses: actions/checkout@v7
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
-
-      - name: Install the project
-        run: uv sync --locked --all-extras --dev
-
-      - name: Install Pandoc
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y pandoc
-          pandoc --version
-          which pandoc
-
-      - name: Run sphinx api doc
-        run: |
-          uv run --active sphinx-apidoc -f -o docs_md/source/api src/splinart
-          cd ./docs_md
-          uv run make html
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
-        with:
-          path: './docs_md/build/html'
-
   # Deploy job
   deploy:
-    # Add a dependency to the build job
-    needs: build
-
     # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     permissions:
       pages: write # to deploy to Pages
@@ -52,12 +14,19 @@ jobs:
 
     # Deploy to the github-pages environment
     environment:
-      name: github-pages
+      name: production-deploiement
       url: ${{ steps.deployment.outputs.page_url }}
 
     # Specify runner + deployment step
     runs-on: ubuntu-latest
     steps:
+      - id: install_pandoc
+        run: sudo apt-get install pandoc
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5 # or specific "vX.X.X" version tag for this action
+        #        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5 # or specific "vX.X.X" version tag for this action
+        #uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5 # or specific "vX.X.X" version tag for this action
+        uses: sphinx-notes/pages@v3
+        with:
+          python_version: 3.13
+          documentation_path: /docs_md/source

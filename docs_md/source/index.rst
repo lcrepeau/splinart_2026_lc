@@ -11,7 +11,7 @@ User manual
   spline
 
 Index
-----
+-----
 
 * :ref:`genindex`
 * :ref:`modindex`

@@ -2409,3 +2409,169 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 ```
+
+## CONCLUSION
+
+* L'utilisation de sphinx est compliqué mais si tout est bien configuré cela fonctionne.
+Il faudra prendre le temps de configurer car cela ne vient pas tout seul.
+
+* L'utilisation de github n'est pas simple. Il faut d'autres réflexes que gitlab.
+
+### CI GITHUB FINAL
+
+* Github travaille dans un répertoire docs pour toute sa cuisine donc mon
+    répertoire docs a été renommé en `docs_md`.
+* Githup fonctionne avec des `pull_request` alors que gitlab fonctionne avec
+    des `merge_request`. Les deux commandes sont équivalentes mais chacun dans
+    son application.
+
+```bash
+$ cat .github/workflows/ci_publish_sphinx.yml
+name: ci_splinart_2026
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: [main]
+
+jobs:
+  # Deploy job
+  deploy:
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: production-deploiement
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # Specify runner + deployment step
+    runs-on: ubuntu-latest
+    steps:
+      - id: install_pandoc
+        run: sudo apt-get install pandoc
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: sphinx-notes/pages@v3
+        with:
+          python_version: 3.13
+          documentation_path: /docs_md/source
+```
+
+Le choix de faire 2 étapes build et deploy n'a pas  été le bon choix.
+Dans le build je lancais la commande pour faire la doc de l'api :
+
+```bash
+# FAIRE LA DOC DE L'API EN rst
+$ uv run --active sphinx-apidoc -f -o docs_md/source/api src/splinart
+```
+
+Cela pouvait fonctione en md mais il fallait encapsuler toutes les commandes
+    sphinx par :
+
+Dans la page source/api/modules.md nous avions :
+
+``````bash
+splinart
+========
+
+.. toctree::
+   :maxdepth: 4
+
+   splinart
+# APRES MODIFICATION
+splinart
+========
+
+```{eval-rst}
+.. toctree::
+   :maxdepth: 4
+
+   splinart
+```
+``````
+
+et aucun logiciel le faisait alors je suis rester simple cad en `rst`.
+
+Je voulais utiliser la github actions `sphinx-notes/pages@v3` et la première
+    action qu'elle entreprennait c'était de virer mon répertoire
+    `docs_md/source/api`. Donc j'ai versionné mes fichiers
+    `docs_md/source/api/*rst` pour qu'ils ne soient pas dégagés.
+
+Cette gihub action ne pourra donc pas être utilisée pour de la production de
+    doc de code automatique puisque tout ce qui n'est pas versionné est nettoyé
+    avant la production du html !
+
+### AJUSTEMENTS
+
+La production en local de sphinx donnait les bons résultats mais pas à
+    distance avec github. Il manquait des bouts à distance.
+
+Après études, j'ai trouvé avec l'IA qu'il manquait des choses dans les fichiers
+    `___ini__.py`.
+
+```bash
+src
+└── src/splinart
+    ├── src/splinart/color.py
+    ├── src/splinart/compute.py
+    ├── src/splinart/draw.py
+    ├── src/splinart/__init__.py
+    ├── src/splinart/scripts
+    │   ├── src/splinart/scripts/cli_splinart.py
+    │   ├── src/splinart/scripts/__init__.py
+    ├── src/splinart/shapes
+    │   ├── src/splinart/shapes/base.py
+    │   ├── src/splinart/shapes/__init__.py
+    ├── src/splinart/spline
+    │   ├── src/splinart/spline/__init__.py
+    │   ├── src/splinart/spline/spline.py
+    │   └── src/splinart/spline/splint.py
+    └── src/splinart/version.py
+```
+
+Il a fallu les régler car c'est dans ces fichiers que sphinx lit pour savoir
+    quels fichiers il doit consulter. Le fichier le plus important est
+    `src/splinart/__init__.py` car il est à la racine du paquet et décide d'à
+     peu près tout. Je les mis au point avec le script
+    `tests_fonctions_disponibles.py` dans le répertoire `tests`. C'est dans ce
+    répertoire que l'on peut savoir si le paquet est bien référencé. Il a fallu
+    ajouter des fichiers `__init__.py` dans chaque dossier de l'application pour
+    indiquer à python et à sphinx où sont les différents fichiers py qui
+    contiennent les fonctions de l'application.
+
+Cela ne suffisait pas à sphinx à distance car il ne trouvait pas la moitié des
+    fichiers pourtant trouvés en local. Il a fallu modifier le fichier de
+    configuration de sphinx qui se trouve dans `docs_md/source/conf.py`.
+
+Il a fallu indiquer le chemin où se trouvait le fichier `__init__.py` principal
+    pour que sphinx retrouve tout. En ajoutant les lignes suivantes au début de
+    ce fichier :
+
+```python
+"""Configuration file for the Sphinx documentation builder."""
+
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
+```
+
+pour que cela passe le test ruff et réponde aux exigences de sphinx. Dès qu'on
+    touche à ce fichier il vaut mieux détruire le répertoire `build` pour
+    repartir propre.
+
+### SPHINX
+
+Lors de la construction sphinx il restait des warnings qui n'ont pas été
+    résolus car pas compris mais cela n'empêchait pas la construction de toute
+    la doc.
+
+Uns fois les problèmes de fichiers `__init__.py` et de `conf.py` cela
+    fonctionnait enfin à distance comme en local mais pas simple.
+
+Le lien de la doc sur github est [https://lcrepeau.github.io/splinart_2026_lc/](https://lcrepeau.github.io/splinart_2026_lc/).

@@ -1,0 +1,15 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  id: b054f1c7-4ddf-439d-b593-0826af2d4fbf
+  # title:
+  # description:
+  # keywords: []
+  # authors: []
+  github: https://github.com/lcrepeau/splinart_2026_lc
+  # To autogenerate a Table of Contents, run "myst init --write-toc"
+site:
+  template: book-theme
+  # options:
+  #   favicon: favicon.ico
+  #   logo: site_logo.png
